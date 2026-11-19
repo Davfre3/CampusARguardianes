@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QCARConfig>
+  <Tracking>
+    <ImageTarget name="viking" size="100.000000 100.000000" />
+    <ImageTarget name="toro" size="100.000000 100.000000" />
+    <ImageTarget name="lobo" size="100.000000 100.000000" />
+    <ImageTarget name="leo" size="100.000000 100.000000" />
+    <ImageTarget name="inge" size="100.000000 100.000000" />
+    <ImageTarget name="eco" size="100.000000 100.000000" />
+    <ImageTarget name="cien" size="100.000000 100.000000" />
+    <ImageTarget name="admin" size="100.000000 100.000000" />
+    <ImageTarget name="image" size="100.000000 71.428574" />
+    <ImageTarget name="image1" size="100.000000 71.428574" />
+    <ImageTarget name="image2" size="100.000000 71.428574" />
+    <ImageTarget name="image3" size="100.000000 71.428574" />
+  </Tracking>
+</QCARConfig>

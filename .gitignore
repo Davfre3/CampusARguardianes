@@ -1,0 +1,21 @@
+# Unity
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/_envio/
+/_Respaldo*/
+/_respaldo*/
+/.vs/
+/.utmp/
+*.csproj
+*.sln
+*.pidb.meta
+UpgradeLog*.htm
+*.apk
+*.aab
+# Paquete de Vuforia (138 MB, supera el límite de GitHub): descargar de developer.vuforia.com
+/Packages/*.tgz

@@ -1,0 +1,81 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfaad837e5c75184ebe22bbc1899519e, type: 3}
+  m_Name: Estacion_ingenieria
+  m_EditorClassIdentifier: Assembly-CSharp::CampusAR.StationDefinition
+  stationId: ingenieria
+  targetName: ING_VIKINGO
+  displayName: "Ingenier\xEDa"
+  mascotaNombre: Vikingo
+  colorFacultad: {r: 0.071, g: 0.6, b: 0.29, a: 1}
+  grupoNombre: "Ingenier\xEDa"
+  insigniaNombre: Innovador
+  mensajePersonalidad: "Resuelve el reto y construye una soluci\xF3n."
+  mascotPrefab: {fileID: 5027355401872437268, guid: 53a930a08f3e43e49992879df13e8138, type: 3}
+  markerImage: {fileID: 2800000, guid: 31c9037bdc45c394ba2ce0a749fe6e10, type: 3}
+  markerWidthMeters: 0.14
+  databasePath: Vuforia/Trabajo_final.xml
+  databaseTargetName: image3
+  modelDatabasePath: 
+  modelTargetName: 
+  summary: "Ingenier\xEDa. Resuelve el reto y construye una soluci\xF3n. Estilo del
+    reto: l\xF3gica, tecnolog\xEDa o innovaci\xF3n. En Carreras puedes abrir la malla,
+    las certificaciones y las \xE1reas de especializaci\xF3n de cada carrera en la
+    p\xE1gina oficial."
+  careers:
+  - nombre: "Ingenier\xEDa Industrial y Comercial"
+    url: https://www.ue.edu.pe/pregrado/images/files/2025/Mallas%20Curriculares/Ingenieria/Malla_Ingenieria%20Industrial%20y%20Comercial.pdf
+    urlMalla: https://www.ue.edu.pe/pregrado/images/files/2025/Mallas%20Curriculares/Ingenieria/Malla_Ingenieria%20Industrial%20y%20Comercial.pdf
+    urlCertificaciones: https://www.ue.edu.pe/pregrado/images/files/2025/Certificaciones/Ingenieria/Ingenieria%20Industrial%20y%20Comercial_Certificados.pdf
+    urlEspecializacion: https://www.ue.edu.pe/pregrado/images/files/2025/Especializaciones/Ingenieria/Ingenieria%20Industrial%20y%20Comercial_Especializacion.pdf
+  - nombre: "Ingenier\xEDa de Software"
+    url: https://www.ue.edu.pe/pregrado/images/files/2025/Mallas%20Curriculares/Ingenieria/Malla_Ingenieria_de_Software.pdf
+    urlMalla: https://www.ue.edu.pe/pregrado/images/files/2025/Mallas%20Curriculares/Ingenieria/Malla_Ingenieria_de_Software.pdf
+    urlCertificaciones: https://www.ue.edu.pe/pregrado/images/files/2026/certificaciones/Certificacion-INGENIERIA-DE-SOFTWARE.pdf
+    urlEspecializacion: https://www.ue.edu.pe/pregrado/images/files/2026/certificaciones/Areas-de-especializacion-INGENIERIA-DE-SOFTWARE.pdf
+  - nombre: "Ingenier\xEDa de Tecnolog\xEDas de Informaci\xF3n y Sistemas"
+    url: https://www.ue.edu.pe/pregrado/images/files/2025/Mallas%20Curriculares/Ingenieria/Malla_Ingenieria%20_de_tecnologias_de_Informacion.pdf
+    urlMalla: https://www.ue.edu.pe/pregrado/images/files/2025/Mallas%20Curriculares/Ingenieria/Malla_Ingenieria%20_de_tecnologias_de_Informacion.pdf
+    urlCertificaciones: https://www.ue.edu.pe/pregrado/images/files/2025/Certificaciones/Ingenieria/Ingenieria%20de%20Tecnologias%20de%20Informacion%20y%20Sistemas_Certificados.pdf
+    urlEspecializacion: https://www.ue.edu.pe/pregrado/images/files/2025/Especializaciones/Ingenieria/Ingenieria%20de%20Tecnologias%20de%20Informacion%20y%20Sistemas_Especializacion.pdf
+  - nombre: "Ingenier\xEDa en Ciencia de Datos"
+    url: https://www.ue.edu.pe/pregrado/carreras/ingenieria-en-ciencia-de-datos
+    urlMalla: https://www.ue.edu.pe/pregrado/carreras/ingenieria-en-ciencia-de-datos
+    urlCertificaciones: https://www.ue.edu.pe/pregrado/images/files/2026/certificaciones/Certificacion-INGENIERIA-DE-CIENCIA-DE-DATOS.pdf
+    urlEspecializacion: https://www.ue.edu.pe/pregrado/images/files/2026/certificaciones/Areas-de-especializacion-INGENIERIA-DE-CIENCIA-DE-DATOS.pdf
+  - nombre: "Ingenier\xEDa en Inteligencia Artificial"
+    url: https://www.ue.edu.pe/pregrado/images/files/2025/Mallas%20Curriculares/Ingenieria/Malla_Ingenieria_en_Inteligencia%20Artificial.pdf
+    urlMalla: https://www.ue.edu.pe/pregrado/images/files/2025/Mallas%20Curriculares/Ingenieria/Malla_Ingenieria_en_Inteligencia%20Artificial.pdf
+    urlCertificaciones: https://www.ue.edu.pe/pregrado/images/files/2025/Certificaciones/Ingenieria/Ingenieria%20en%20Inteligencia%20Artificial_Certificados.pdf
+    urlEspecializacion: https://www.ue.edu.pe/pregrado/images/files/2025/Especializaciones/Ingenieria/Ingenieria%20en%20Inteligencia%20Artificial_Especializacion.pdf
+  mapImage: {fileID: 0}
+  directions: 
+  contact: "Oficina de Admisi\xF3n de Pregrado\nTel\xE9fono: 989 094 988\nCorreo:
+    exitoesan@ue.edu.pe"
+  serviceHours: "Atenci\xF3n presencial: lunes a viernes, de 10:00 a. m. a 6:45 p.
+    m."
+  webUrl: https://davfre3.github.io/campus-ar-guardians-web/vikingo.html
+  ilustracion: {fileID: 21300000, guid: 75eccc0a303bf924b91d4300bf8890ab, type: 3}
+  mapUrl: 
+  quiz:
+    pregunta: "\xBFQu\xE9 tecnolog\xEDa permite que un sistema aprenda patrones a
+      partir de datos?"
+    opciones:
+    - Machine Learning
+    - "Impresi\xF3n"
+    - "Correo electr\xF3nico"
+    indiceCorrecto: 0
+    explicacion: Machine Learning permite que un sistema aprenda patrones a partir
+      de ejemplos.
+    pista: "Busca una tecnolog\xEDa que aprende a partir de ejemplos."
+  contentVersion: "0.3 (contenido de la gu\xEDa de gamificaci\xF3n y del zip; mapa
+    fuera por decisi\xF3n del equipo)"

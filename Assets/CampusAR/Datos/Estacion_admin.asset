@@ -1,0 +1,81 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfaad837e5c75184ebe22bbc1899519e, type: 3}
+  m_Name: Estacion_admin
+  m_EditorClassIdentifier: Assembly-CSharp::CampusAR.StationDefinition
+  stationId: admin
+  targetName: ADMIN_LOBO
+  displayName: "Administraci\xF3n"
+  mascotaNombre: Lobo
+  colorFacultad: {r: 0.122, g: 0.31, b: 0.878, a: 1}
+  grupoNombre: "Administraci\xF3n y negocios"
+  insigniaNombre: Estratega
+  mensajePersonalidad: Piensa como quien dirige y toma decisiones.
+  mascotPrefab: {fileID: 5993528057466213680, guid: c110a61c68b2b8246aabcf901fdf6378, type: 3}
+  markerImage: {fileID: 2800000, guid: 00d9f9f191998cc4fa413f9c1fa36d1b, type: 3}
+  markerWidthMeters: 0.14
+  databasePath: Vuforia/Trabajo_final.xml
+  databaseTargetName: image
+  modelDatabasePath: Vuforia/Business_Wolf_texture.xml
+  modelTargetName: Business_Wolf_texture
+  summary: "Administraci\xF3n y negocios. Piensa como quien dirige y toma decisiones.
+    Estilo del reto: decisi\xF3n, estrategia o gesti\xF3n. En Carreras puedes abrir
+    la malla, las certificaciones y las \xE1reas de especializaci\xF3n de cada carrera
+    en la p\xE1gina oficial."
+  careers:
+  - nombre: "Administraci\xF3n"
+    url: https://www.ue.edu.pe/pregrado/carreras/administracion
+    urlMalla: https://www.ue.edu.pe/pregrado/carreras/administracion
+    urlCertificaciones: https://www.ue.edu.pe/pregrado/images/files/2025/FCEA/certificaciones/Administracion.pdf
+    urlEspecializacion: https://www.ue.edu.pe/pregrado/images/files/2025/FCEA/especializaciones/Administracion.pdf
+  - nombre: "Administraci\xF3n y Finanzas"
+    url: https://www.ue.edu.pe/pregrado/carreras/administracion-finanzas
+    urlMalla: https://www.ue.edu.pe/pregrado/carreras/administracion-finanzas
+    urlCertificaciones: https://www.ue.edu.pe/pregrado/images/files/2025/FCEA/certificaciones/Administracion%20y%20Finanzas.pdf
+    urlEspecializacion: https://www.ue.edu.pe/pregrado/images/files/2025/FCEA/especializaciones/Administracion%20y%20Finanzas.pdf
+  - nombre: "Administraci\xF3n y Marketing"
+    url: https://www.ue.edu.pe/pregrado/carreras/administracion-marketing
+    urlMalla: https://www.ue.edu.pe/pregrado/carreras/administracion-marketing
+    urlCertificaciones: https://www.ue.edu.pe/pregrado/images/files/2025/FCEA/certificaciones/Administracion%20y%20Marketing.pdf
+    urlEspecializacion: https://www.ue.edu.pe/pregrado/images/files/2025/FCEA/especializaciones/Administracion%20y%20Marketing.pdf
+  - nombre: "Administraci\xF3n y Negocios Internacionales"
+    url: https://www.ue.edu.pe/pregrado/carreras/administracion-y-negocios-internacionales
+    urlMalla: https://www.ue.edu.pe/pregrado/carreras/administracion-y-negocios-internacionales
+    urlCertificaciones: https://www.ue.edu.pe/pregrado/images/files/2025/FCEA/certificaciones/Administracion%20y%20Negocios%20Internacionales.pdf
+    urlEspecializacion: https://www.ue.edu.pe/pregrado/images/files/2025/FCEA/especializaciones/Administracion%20y%20Negocios%20Internacionales.pdf
+  - nombre: "Comunicaci\xF3n Empresarial y Marketing Digital"
+    url: https://www.ue.edu.pe/pregrado/carreras/comunicacion-empresarial-y-marketing-digital
+    urlMalla: https://www.ue.edu.pe/pregrado/carreras/comunicacion-empresarial-y-marketing-digital
+    urlCertificaciones: https://www.ue.edu.pe/pregrado/images/files/2025/FCEA/certificaciones/Comunicacion%20Empresarial%20y%20Marketing%20Digital.pdf
+    urlEspecializacion: https://www.ue.edu.pe/pregrado/images/files/2025/FCEA/especializaciones/Comunicacion%20Empresarial%20y%20Marketing%20Digital.pdf
+  mapImage: {fileID: 0}
+  directions: 
+  contact: "Oficina de Admisi\xF3n de Pregrado\nTel\xE9fono: 989 094 988\nCorreo:
+    exitoesan@ue.edu.pe"
+  serviceHours: "Atenci\xF3n presencial: lunes a viernes, de 10:00 a. m. a 6:45 p.
+    m."
+  webUrl: https://davfre3.github.io/campus-ar-guardians-web/lobo.html
+  ilustracion: {fileID: 21300000, guid: c0469d0d24b39e144a46fc56ae547450, type: 3}
+  mapUrl: 
+  quiz:
+    pregunta: "Una empresa desea entrar a un nuevo mercado. \xBFQu\xE9 deber\xEDa
+      revisar primero?"
+    opciones:
+    - Demanda y competencia
+    - Color del logo
+    - "Tama\xF1o de la oficina"
+    indiceCorrecto: 0
+    explicacion: "Antes de entrar a un mercado conviene saber cu\xE1nta demanda hay
+      y qui\xE9n m\xE1s compite."
+    pista: "Piensa en qui\xE9nes comprar\xEDan y qui\xE9nes ya venden algo parecido."
+  contentVersion: "0.3 (contenido de la gu\xEDa de gamificaci\xF3n y del zip; mapa
+    fuera por decisi\xF3n del equipo)"

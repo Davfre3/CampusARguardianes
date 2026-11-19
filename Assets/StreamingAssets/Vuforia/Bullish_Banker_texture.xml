@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QCARConfig>
+<Tracking>
+<ModelTarget name="Bullish_Banker_texture" motionHint="adaptive" trackingMode="scan" optimizeTrackingFor="default"/>
+
+</Tracking>
+
+<Assembly name="Bullish_Banker_textures_assembly" assemblyId="06133057429a4f50a9d927da2736901c">
+<Part name="Bullish_Banker_texture" translation="0 0 0" rotation="AD: 0 0 1 0"/>
+<EntryPoint name="GuideView_0000" translation="1.07381e-05 1.06972e-05 0.0532102" rotation="AD: 0.999593 0.118019 -0.272804 225.045" trained="no">
+
+</EntryPoint>
+<EntryPoint name="GuideView_0001" translation="2.41684e-05 -1.65594e-05 0.0532214" rotation="AD: 1 0.000268089 -0.017657 181.739" trained="no">
+
+</EntryPoint>
+<EntryPoint name="GuideView_0002" translation="3.24287e-05 -1.76681e-05 0.0532431" rotation="AD: 0.999722 -0.0593754 0.437271 194.162" trained="no">
+
+</EntryPoint>
+<EntryPoint name="GuideView_0003" translation="-2.451e-05 -2.14456e-05 0.0532613" rotation="AD: 0.0913706 -1.00163 9.29727 180.121" trained="no">
+
+</EntryPoint>
+<EntryPoint name="GuideView_0004" translation="-2.24691e-05 -1.56027e-05 0.0532191" rotation="AD: -0.999668 -0.0355061 1.05603 177.353" trained="no">
+
+</EntryPoint>
+<EntryPoint name="GuideView_0005" translation="-3.26466e-05 -1.62758e-05 0.053238" rotation="AD: -0.856984 -0.557549 2.51829 172.013" trained="no">
+
+</EntryPoint>
+<EntryPoint name="GuideView_0006" translation="3.26e-05 -1.72855e-05 0.0532421" rotation="AD: 0.999999 0.00409331 0.328518 178.644" trained="no">
+
+</EntryPoint>
+
+</Assembly>
+
+</QCARConfig>

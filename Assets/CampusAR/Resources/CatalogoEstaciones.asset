@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: CatalogoEstaciones
+  m_EditorClassIdentifier: Assembly-CSharp:CampusAR:StationCatalog
+  estaciones:
+  - {fileID: 11400000, guid: 0f3f41ebfa23f0145ab769870ab28a57, type: 2}
+  - {fileID: 11400000, guid: 11a1e0dceb770c94fabfb77e628e5a07, type: 2}
+  - {fileID: 11400000, guid: f7bbd7cf6f46c9947ac6efb76919f572, type: 2}
+  - {fileID: 11400000, guid: 6078d943b399fcb4c859c3812f0f4fbc, type: 2}

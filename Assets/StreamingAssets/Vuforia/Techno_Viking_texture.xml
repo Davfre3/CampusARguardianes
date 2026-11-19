@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QCARConfig>
+<Tracking>
+<ModelTarget name="Techno_Viking_texture" motionHint="adaptive" trackingMode="scan" optimizeTrackingFor="default"/>
+
+</Tracking>
+
+<Assembly name="Techno_Viking_textures_assembly" assemblyId="7dbc690c253841bbbbd809e48b402b6f">
+<Part name="Techno_Viking_texture" translation="0 0 0" rotation="AD: 0 0 1 0"/>
+<EntryPoint name="GuideView_0000" translation="1.72034e-05 3.20021e-05 0.0532212" rotation="AD: 0.99898 0.155454 -0.337301 226.728" trained="no">
+
+</EntryPoint>
+<EntryPoint name="GuideView_0001" translation="-3.77288e-05 -8.07337e-06 0.0532229" rotation="AD: -0.99705 -0.1061 1.05569 172.126" trained="no">
+
+</EntryPoint>
+<EntryPoint name="GuideView_0002" translation="-5.35157e-05 -2.71071e-05 0.0532883" rotation="AD: -0.366408 -0.956163 4.33948 177.925" trained="no">
+
+</EntryPoint>
+<EntryPoint name="GuideView_0003" translation="3.78818e-05 -3.62155e-05 0.0533053" rotation="AD: 0.989431 -0.217238 0.931325 199.042" trained="no">
+
+</EntryPoint>
+<EntryPoint name="GuideView_0004" translation="5.85262e-05 -3.30061e-06 0.0532508" rotation="AD: 0.999826 -0.0956122 0.217934 226.225" trained="no">
+
+</EntryPoint>
+<EntryPoint name="GuideView_0005" translation="-5.57816e-05 8.15606e-06 0.0532454" rotation="AD: -0.790342 -0.791995 1.46237 153.827" trained="no">
+
+</EntryPoint>
+<EntryPoint name="GuideView_0006" translation="3.39537e-05 -5.2087e-05 0.0532691" rotation="AD: 0.999873 -0.113886 -0.170906 113.732" trained="no">
+
+</EntryPoint>
+
+</Assembly>
+
+</QCARConfig>

@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfaad837e5c75184ebe22bbc1899519e, type: 3}
+  m_Name: Estacion_ciencias
+  m_EditorClassIdentifier: Assembly-CSharp::CampusAR.StationDefinition
+  stationId: ciencias
+  targetName: CIE_LEON
+  displayName: Derecho y Ciencias Sociales
+  mascotaNombre: "Le\xF3n"
+  colorFacultad: {r: 0.965, g: 0.71, b: 0, a: 1}
+  grupoNombre: Derecho y Ciencias Sociales
+  insigniaNombre: Explorador social
+  mensajePersonalidad: Analiza el caso y comprende a las personas y su entorno.
+  mascotPrefab: {fileID: 6298170682987873505, guid: 3e9390270f9b1ec48ad310d98a555cf9, type: 3}
+  markerImage: {fileID: 2800000, guid: dbc7c7d6a35495742ae8896dd3959d5e, type: 3}
+  markerWidthMeters: 0.14
+  databasePath: Vuforia/Trabajo_final.xml
+  databaseTargetName: image1
+  modelDatabasePath: 
+  modelTargetName: 
+  summary: "Derecho y Ciencias Sociales. Analiza el caso y comprende a las personas
+    y su entorno. Estilo del reto: interpretaci\xF3n, caso breve o comportamiento
+    humano. En Carreras puedes abrir la malla, las certificaciones y las \xE1reas
+    de especializaci\xF3n de cada carrera en la p\xE1gina oficial."
+  careers:
+  - nombre: Derecho
+    url: https://www.ue.edu.pe/pregrado/carreras/derecho
+    urlMalla: https://www.ue.edu.pe/pregrado/carreras/derecho
+    urlCertificaciones: https://www.ue.edu.pe/pregrado/images/files/2026/certificaciones/Certificacion-DERECHO.pdf
+    urlEspecializacion: https://www.ue.edu.pe/pregrado/images/files/2026/certificaciones/Areas-de-especializacion-DERECHO.pdf
+  - nombre: Derecho Corporativo
+    url: https://www.ue.edu.pe/pregrado/carreras/derecho-corporativo
+    urlMalla: https://www.ue.edu.pe/pregrado/carreras/derecho-corporativo
+    urlCertificaciones: https://www.ue.edu.pe/pregrado/images/files/2024/Certificaciones-Especializaciones/Certificados%20de%20especialidad%20y%20certificaciones%20transversales%20-%20Derecho%20Corporativo-2.pdf
+    urlEspecializacion: https://www.ue.edu.pe/pregrado/images/files/2024/Certificaciones-Especializaciones/Certificados%20de%20especialidad%20y%20certificaciones%20transversales%20-%20Derecho%20Corporativo-1.pdf
+  - nombre: "Psicolog\xEDa"
+    url: https://www.ue.edu.pe/pregrado/carreras/psicologia
+    urlMalla: https://www.ue.edu.pe/pregrado/carreras/psicologia
+    urlCertificaciones: https://www.ue.edu.pe/pregrado/images/files/2026/certificaciones/Certificacion-PSICOLOGIA.pdf
+    urlEspecializacion: https://www.ue.edu.pe/pregrado/images/files/2026/certificaciones/Areas-de-especializacion-PSICOLOGIA.pdf
+  mapImage: {fileID: 0}
+  directions: 
+  contact: "Oficina de Admisi\xF3n de Pregrado\nTel\xE9fono: 989 094 988\nCorreo:
+    exitoesan@ue.edu.pe"
+  serviceHours: "Atenci\xF3n presencial: lunes a viernes, de 10:00 a. m. a 6:45 p.
+    m."
+  webUrl: https://davfre3.github.io/campus-ar-guardians-web/leon.html
+  ilustracion: {fileID: 21300000, guid: 411ffa7a71a98524a87260c0bdfe0f62, type: 3}
+  mapUrl: 
+  quiz:
+    pregunta: "Antes de decidir en un conflicto, \xBFqu\xE9 acci\xF3n es m\xE1s adecuada?"
+    opciones:
+    - Revisar hechos y normas/contexto
+    - Elegir al azar
+    - Ignorar a las partes
+    indiceCorrecto: 0
+    explicacion: "Una decisi\xF3n justa parte de conocer los hechos, las normas y
+      el contexto."
+    pista: "Antes de decidir, hay que saber qu\xE9 pas\xF3 y qu\xE9 reglas aplican."
+  contentVersion: "0.3 (contenido de la gu\xEDa de gamificaci\xF3n y del zip; mapa
+    fuera por decisi\xF3n del equipo)"

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QCARConfig>
+<Tracking>
+<ModelTarget name="Lab_Lion_texture" motionHint="adaptive" trackingMode="car" optimizeTrackingFor="default"/>
+
+</Tracking>
+
+<Assembly name="Lab_Lion_textures_assembly" assemblyId="d43505c74c4a472f8ac780b5a67ee384">
+<Part name="Lab_Lion_texture" translation="0 0 0" rotation="AD: 0 0 1 0"/>
+<EntryPoint name="GuideView_0000" translation="5.06267e-06 -1.66241e-06 0.0532024" rotation="AD: 0.998743 0.155493 -0.372373 222.329" trained="no">
+
+</EntryPoint>
+<EntryPoint name="GuideView_0001" translation="1.30206e-05 -1.55242e-05 0.0532138" rotation="AD: 1 0.001824 -0.0221139 189.428" trained="no">
+
+</EntryPoint>
+<EntryPoint name="GuideView_0002" translation="-1.07028e-05 -1.61883e-05 0.0532124" rotation="AD: -0.99922 -0.0501887 1.27647 177.225" trained="no">
+
+</EntryPoint>
+<EntryPoint name="GuideView_0003" translation="-1.16881e-05 -1.80127e-05 0.0532332" rotation="AD: 0.890943 -0.456684 9.40646 180.524" trained="no">
+
+</EntryPoint>
+<EntryPoint name="GuideView_0004" translation="8.51182e-06 -1.94575e-05 0.0532337" rotation="AD: 0.997649 -0.100629 0.938048 188.914" trained="no">
+
+</EntryPoint>
+<EntryPoint name="GuideView_0005" translation="-1.53501e-05 -1.65869e-05 0.0532202" rotation="AD: -0.760313 -0.674972 3.63396 175.714" trained="no">
+
+</EntryPoint>
+<EntryPoint name="GuideView_0006" translation="-1.11067e-05 6.06291e-06 0.0532441" rotation="AD: 0.198626 1.24791 1.61498 171.439" trained="no">
+
+</EntryPoint>
+
+</Assembly>
+
+</QCARConfig>

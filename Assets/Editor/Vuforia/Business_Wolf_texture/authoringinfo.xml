@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QCARInfo>
+<TargetSet version="27.0" toolVersion="11.4.4">
+<ModelTarget name="Business_Wolf_texture" targetId="0dc0f14e30934752aabbc13909699307" version="14.0" toolVersion="11.4.4" bbox="-0.053298 -0.095126 -0.0624721 0.0538154 0.0947194 0.0623114" upVector="0 1 0" previewImage="0dc0f14e30934752aabbc13909699307_preview.jpg"/>
+
+</TargetSet>
+
+<Assembly name="Business_Wolf_textures_assembly" assemblyId="32f209dd3b8d4e98b233c6299bb001cf">
+<Part name="Business_Wolf_texture" translation="0 0 0" rotation="AD: 0 0 1 0"/>
+<EntryPoint name="GuideView_0000" translation="0.000107557 5.48363e-05 0.532019" rotation="AD: 0.996838 0.209225 -0.458045 224.362" image="Business_Wolf_texture_GuideView_0000.png" trained="no">
+
+</EntryPoint>
+<EntryPoint name="GuideView_0001" translation="0.000255426 -0.000191055 0.532221" rotation="AD: 1 0.00115068 -0.0191791 186.866" image="Business_Wolf_texture_GuideView_0001.png" trained="no">
+
+</EntryPoint>
+<EntryPoint name="GuideView_0002" translation="-0.000118248 -0.000175958 0.532071" rotation="AD: -0.998878 -0.06255 1.1619 175.983" image="Business_Wolf_texture_GuideView_0002.png" trained="no">
+
+</EntryPoint>
+<EntryPoint name="GuideView_0003" translation="-0.000262417 -0.000209071 0.532381" rotation="AD: -0.445452 -0.896743 17.6682 179.854" image="Business_Wolf_texture_GuideView_0003.png" trained="no">
+
+</EntryPoint>
+<EntryPoint name="GuideView_0004" translation="9.30317e-05 -0.000219286 0.532576" rotation="AD: 0.999776 -0.0307261 0.951423 182.68" image="Business_Wolf_texture_GuideView_0004.png" trained="no">
+
+</EntryPoint>
+<EntryPoint name="GuideView_0005" translation="0.000239909 -0.000233516 0.532284" rotation="AD: 0.99824 -0.167486 0.412751 220.665" image="Business_Wolf_texture_GuideView_0005.png" trained="no">
+
+</EntryPoint>
+<EntryPoint name="GuideView_0006" translation="0.000243094 -0.000197649 0.532464" rotation="AD: 0.999995 -0.0482796 -0.0779869 116.694" image="Business_Wolf_texture_GuideView_0006.png" trained="no">
+
+</EntryPoint>
+
+</Assembly>
+
+</QCARInfo>
