@@ -185,7 +185,11 @@ namespace CampusAR.EditorTools
             var lit = Shader.Find("Universal Render Pipeline/Lit");
             foreach (var e in Estaciones)
             {
-                var fbx = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Modelos/" + e.fbx + ".fbx");
+                string rutaAnim = Raiz + "/Animaciones/" + e.id;
+                var ctrlAnim = AssetDatabase.LoadAssetAtPath<UnityEditor.Animations.AnimatorController>(rutaAnim + "/Animator_" + e.id + ".controller");
+                var fbxAnim = AssetDatabase.LoadAssetAtPath<GameObject>(rutaAnim + "/Personaje.fbx");
+                bool conAnim = ctrlAnim != null && fbxAnim != null;
+                var fbx = conAnim ? fbxAnim : AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Modelos/" + e.fbx + ".fbx");
                 if (fbx == null) { Debug.LogWarning("[Campus AR] Sin modelo para " + e.nombre + ": se usará la figura temporal."); continue; }
 
                 var root = new GameObject("Mascota_" + e.mascota);
@@ -207,6 +211,11 @@ namespace CampusAR.EditorTools
                     }
                 }
 
+                if (conAnim)
+                {
+                    inst.transform.localRotation = Quaternion.Euler(0f, 180f, 0f);   // Mixamo mira a +Z; la app usa -Z como frente
+                }
+                else
                 // Orientación: en estos FBX la cabeza está en +Z y el frente en -Y (datos del archivo).
                 // Se calcula dónde quedan en el mundo y se corrige para que el personaje quede de pie
                 // (cabeza arriba) y mirando hacia el borde inferior de la placa, donde está quien la escanea.
@@ -223,6 +232,13 @@ namespace CampusAR.EditorTools
                 // Evita que el modelo se recorte por límites mal calculados del esqueleto
                 foreach (var smr in inst.GetComponentsInChildren<SkinnedMeshRenderer>(true)) smr.updateWhenOffscreen = true;
                 foreach (var an in inst.GetComponentsInChildren<Animator>(true)) an.cullingMode = AnimatorCullingMode.AlwaysAnimate;
+                if (conAnim)
+                {
+                    var an0 = inst.GetComponent<Animator>() ?? inst.AddComponent<Animator>();
+                    an0.runtimeAnimatorController = ctrlAnim; an0.applyRootMotion = false;
+                    an0.cullingMode = AnimatorCullingMode.AlwaysAnimate;
+                    Debug.Log("[Campus AR] " + e.mascota + ": usando animaciones de Mixamo.");
+                }
 
                 // Normalizar: altura 0,20 m, apoyo en y=0, centrado en x/z
                 Bounds b = Limites(rs);
@@ -688,9 +704,10 @@ namespace CampusAR.EditorTools
             Anclar(acc, new Vector2(0, 0), new Vector2(1, 0), new Vector2(0.5f, 0), new Vector2(0, 225), new Vector2(-48, 140));
             var ah = acc.gameObject.AddComponent<HorizontalLayoutGroup>();
             ah.spacing = 16; ah.childControlWidth = true; ah.childControlHeight = true; ah.childForceExpandWidth = true; ah.childForceExpandHeight = true;
-            var bGirar = Btn(acc, "BtnGirar", "Girar", Boton, 140, 44);
-            var bCaminar = Btn(acc, "BtnCaminar", "Caminar", Boton, 140, 44);
-            var bInfo = Btn(acc, "BtnInfo", "Info", new Color(0.95f, 0.65f, 0.10f, 1f), 140, 44);
+            var bGirar = Btn(acc, "BtnGirar", "Girar", Boton, 140, 38);
+            var bCaminar = Btn(acc, "BtnCaminar", "Caminar", Boton, 140, 38);
+            var bBailar = Btn(acc, "BtnBailar", "Bailar", new Color(0.62f, 0.25f, 0.80f, 1f), 140, 38);
+            var bInfo = Btn(acc, "BtnInfo", "Info", new Color(0.95f, 0.65f, 0.10f, 1f), 140, 38);
             acc.gameObject.SetActive(false);
 
             // burbuja de información (se cierra al tocarla)
@@ -700,6 +717,16 @@ namespace CampusAR.EditorTools
             bubTxt.fontStyle = FontStyles.Normal; bubTxt.fontSize = 40; bubTxt.alignment = TextAlignmentOptions.MidlineLeft;
             var bubOut = bub.gameObject.AddComponent<Outline>(); bubOut.effectColor = new Color(1f, 0.82f, 0.2f, 1f); bubOut.effectDistance = new Vector2(6, -6);
             bub.gameObject.SetActive(false);
+
+            // palanca para caminar (aparece al pulsar «Caminar»)
+            var jb = Rt("Joystick", hud);
+            Anclar(jb, new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0), new Vector2(50, 400), new Vector2(340, 340));
+            var jbImg = jb.gameObject.AddComponent<Image>(); jbImg.sprite = JoystickVirtual.Circulo(); jbImg.color = new Color(1f, 1f, 1f, 0.28f);
+            var jh = Rt("Mango", jb);
+            Anclar(jh, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(150, 150));
+            var jhImg = jh.gameObject.AddComponent<Image>(); jhImg.sprite = JoystickVirtual.Circulo(); jhImg.color = new Color(1f, 1f, 1f, 0.85f); jhImg.raycastTarget = false;
+            var joy = jb.gameObject.AddComponent<JoystickVirtual>(); joy.baseRt = jb; joy.mango = jh;
+            jb.gameObject.SetActive(false);
 
             // ¿no reconoce?
             var nr = Rt("PanelNoReconoce", hud);
@@ -740,7 +767,9 @@ namespace CampusAR.EditorTools
             ctl.panelAcciones = acc.gameObject; ctl.burbuja = bub.gameObject; ctl.burbujaTexto = bubTxt;
             ctl.etiquetaGirar = bGirar.transform.Find("Etiqueta").GetComponent<TMP_Text>();
             ctl.etiquetaCaminar = bCaminar.transform.Find("Etiqueta").GetComponent<TMP_Text>();
-            Al(bGirar, ctl.GirarMascota); Al(bCaminar, ctl.CaminarMascota); Al(bInfo, ctl.InfoMascota); Al(bub, ctl.CerrarBurbuja);
+            ctl.etiquetaBailar = bBailar.transform.Find("Etiqueta").GetComponent<TMP_Text>();
+            ctl.joystick = joy;
+            Al(bGirar, ctl.GirarMascota); Al(bCaminar, ctl.CaminarMascota); Al(bBailar, ctl.BailarMascota); Al(bInfo, ctl.InfoMascota); Al(bub, ctl.CerrarBurbuja);
             return hud.gameObject;
         }
 

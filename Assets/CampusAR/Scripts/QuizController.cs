@@ -85,7 +85,8 @@ namespace CampusAR
             {
                 bool nuevo = ProgressService.Completar(est.stationId);
                 AudioManager.Acierto(); if (nuevo) AudioManager.Insignia();
-                ConfetiUI.Lanzar(GetComponentInParent<Canvas>() != null ? GetComponentInParent<Canvas>().transform : null, est.colorFacultad);
+                var cv = GetComponentInParent<Canvas>();
+                if (cv != null) { if (nuevo) StartCoroutine(PopupTras(cv.transform)); else ConfetiUI.Lanzar(cv.transform, est.colorFacultad); }
                 MostrarInsignia(true, true);
                 retroalimentacion.text = "<b>¡Correcto!</b>\n" + est.quiz.explicacion + "\n\n" +
                     (nuevo ? "Obtuviste la insignia «" + est.insigniaNombre + "» y el sello de " + est.displayName + "."
@@ -103,6 +104,13 @@ namespace CampusAR
                 reintentar.gameObject.SetActive(true);
                 reintentar.GetComponentInChildren<TMP_Text>().text = "Intentar de nuevo";
             }
+        }
+
+        System.Collections.IEnumerator PopupTras(Transform lienzo)
+        {
+            yield return new WaitForSecondsRealtime(0.6f);
+            var cat = flow != null ? flow.catalogo : Resources.Load<StationCatalog>("CatalogoEstaciones");
+            InsigniaPopup.Mostrar(lienzo, est, cat != null && ProgressService.InsigniaDesbloqueada(cat));
         }
 
         System.Collections.IEnumerator Sacudir(Transform t)

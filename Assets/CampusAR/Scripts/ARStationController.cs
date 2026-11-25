@@ -34,7 +34,8 @@ namespace CampusAR
         public TMP_Text tarjetaTitulo;
         [Header("Acciones de la mascota")]
         public GameObject panelAcciones, burbuja;
-        public TMP_Text burbujaTexto, etiquetaGirar, etiquetaCaminar;
+        public TMP_Text burbujaTexto, etiquetaGirar, etiquetaCaminar, etiquetaBailar;
+        public JoystickVirtual joystick;
         public float segundosParaAyuda = 10f;
         public float retardoMenu = 0.15f;   // el menú aparece directamente tras escanear la placa
 
@@ -82,6 +83,11 @@ namespace CampusAR
 
         void Update()
         {
+            if (joystick != null && joystick.gameObject.activeInHierarchy)
+            {
+                var fxj = FxActual();
+                if (fxj != null) fxj.SetMovimiento(joystick.Valor);
+            }
             // RF16: si tras unos segundos no se reconoce ninguna placa, ofrecer ayuda y una salida clara.
             if (panelNoReconoce == null || flow == null) return;
             bool buscando = actual == null && !AlgunoTracked() && flow.EnRaiz && errorInicio == null;
@@ -245,10 +251,13 @@ namespace CampusAR
             var fx = FxActual();
             if (etiquetaGirar != null) etiquetaGirar.text = fx != null && fx.Girando ? "Parar" : "Girar";
             if (etiquetaCaminar != null) etiquetaCaminar.text = fx != null && fx.Caminando ? "Parar" : "Caminar";
+            if (etiquetaBailar != null) etiquetaBailar.text = fx != null && fx.Bailando ? "Parar" : "Bailar";
+            if (joystick != null) joystick.gameObject.SetActive(fx != null && fx.Caminando && panelAcciones != null && panelAcciones.activeSelf);
         }
 
         public void GirarMascota() { var fx = FxActual(); if (fx == null) return; fx.AlternarGiro(); RefrescarEtiquetasAcciones(); }
         public void CaminarMascota() { var fx = FxActual(); if (fx == null) return; fx.AlternarCaminar(); RefrescarEtiquetasAcciones(); }
+        public void BailarMascota() { var fx = FxActual(); if (fx == null) return; fx.AlternarBaile(); RefrescarEtiquetasAcciones(); }
 
         Coroutine burbujaCo;
         public void InfoMascota()
@@ -346,6 +355,7 @@ namespace CampusAR
             {
                 e.contenido.SetActive(false);
                 if (panelAcciones != null) panelAcciones.SetActive(false);
+                if (joystick != null) joystick.gameObject.SetActive(false);
                 CerrarBurbuja();
                 Estado("Seguimiento perdido. Vuelve a enfocar la imagen de " + actual.def.displayName + ".");
                 if (guiaEscaneo != null) guiaEscaneo.SetActive(true);
@@ -406,7 +416,7 @@ namespace CampusAR
         {
             if (tarjetaEstacion != null) tarjetaEstacion.SetActive(detectada);
             if (panelAcciones != null) panelAcciones.SetActive(detectada);
-            if (!detectada) CerrarBurbuja();
+            if (!detectada) { CerrarBurbuja(); if (joystick != null) joystick.gameObject.SetActive(false); }
             if (guiaEscaneo != null && !detectada) guiaEscaneo.SetActive(true);
         }
 
