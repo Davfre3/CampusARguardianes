@@ -36,7 +36,7 @@ namespace CampusAR
             var ic = Crear("Icono", tarjeta);
             ic.sizeDelta = new Vector2(640, 640); ic.anchoredPosition = new Vector2(0, 90);
             var img = ic.gameObject.AddComponent<Image>(); img.preserveAspect = true; img.raycastTarget = false;
-            if (def.insigniaIcono != null) img.sprite = def.insigniaIcono;
+            if (def.Icono() != null) img.sprite = def.Icono();
             else { img.sprite = JoystickVirtual.Circulo(); img.color = def.colorFacultad; }
             ic.gameObject.AddComponent<PopIn>().retardo = 0.15f;
 

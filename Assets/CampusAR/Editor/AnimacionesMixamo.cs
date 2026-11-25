@@ -30,6 +30,47 @@ namespace CampusAR.EditorTools
                 string pPers = d + "/Personaje.fbx";
                 if (!File.Exists(pPers)) { Debug.Log("[Animaciones] " + id + ": sin Personaje.fbx, se omite (usará la animación por código)."); continue; }
 
+                // 0) Rig hecho en Blender: un solo FBX con las acciones Idle/Caminar/Bailar (rig Generic)
+                if (!File.Exists(d + "/Idle.fbx"))
+                {
+                    var ig = AssetImporter.GetAtPath(pPers) as ModelImporter;
+                    ig.animationType = ModelImporterAnimationType.Generic;
+                    ig.avatarSetup = ModelImporterAvatarSetup.CreateFromThisModel;
+                    ig.importAnimation = true;
+                    ig.SaveAndReimport();
+                    var todos = AssetDatabase.LoadAllAssetsAtPath(pPers).OfType<AnimationClip>().Where(c => !c.name.StartsWith("__preview")).ToList();
+                    AnimationClip Buscar(string n) { return todos.FirstOrDefault(c => c.name == n || c.name.EndsWith("|" + n) || c.name.Contains(n)); }
+                    var cl2 = ig.defaultClipAnimations;
+                    foreach (var c in cl2) { bool una = c.name.EndsWith("Golpear") || c.name.EndsWith("Escribir"); c.loopTime = !una; c.loopPose = !una; string n = c.name; int k = n.LastIndexOf('|'); if (k >= 0) c.name = n.Substring(k + 1); }
+                    ig.clipAnimations = cl2; ig.SaveAndReimport();
+                    todos = AssetDatabase.LoadAllAssetsAtPath(pPers).OfType<AnimationClip>().Where(c => !c.name.StartsWith("__preview")).ToList();
+                    var gi = Buscar("Idle"); var gc = Buscar("Caminar"); var gb = Buscar("Bailar");
+                    if (gi == null) { Debug.LogWarning("[Animaciones] " + id + ": el FBX no trae la acción Idle."); continue; }
+                    string pc2 = d + "/Animator_" + id + ".controller";
+                    AssetDatabase.DeleteAsset(pc2);
+                    var ct2 = AnimatorController.CreateAnimatorControllerAtPath(pc2);
+                    ct2.AddParameter("Caminar", AnimatorControllerParameterType.Bool);
+                    ct2.AddParameter("Baile", AnimatorControllerParameterType.Bool);
+                    ct2.AddParameter("Golpear", AnimatorControllerParameterType.Trigger);
+                    ct2.AddParameter("Escribir", AnimatorControllerParameterType.Trigger);
+                    var sm2 = ct2.layers[0].stateMachine;
+                    var si = sm2.AddState("Idle"); si.motion = gi; sm2.defaultState = si;
+                    if (gc != null) { var s = sm2.AddState("Caminar"); s.motion = gc; Enlazar(si, s, "Caminar", true); Enlazar(s, si, "Caminar", false); }
+                    if (gb != null) { var s = sm2.AddState("Bailar"); s.motion = gb; Enlazar(si, s, "Baile", true); Enlazar(s, si, "Baile", false); }
+                    foreach (var par in new[] { "Golpear", "Escribir" })
+                    {
+                        var cp = Buscar(par); if (cp == null) continue;
+                        var sa = sm2.AddState(par); sa.motion = cp;
+                        var ta = sm2.AddAnyStateTransition(sa); ta.hasExitTime = false; ta.duration = 0.1f; ta.canTransitionToSelf = false;
+                        ta.AddCondition(AnimatorConditionMode.If, 0f, par);
+                        var tb = sa.AddTransition(si); tb.hasExitTime = true; tb.exitTime = 0.95f; tb.duration = 0.15f;
+                    }
+                    EditorUtility.SetDirty(ct2); AssetDatabase.SaveAssets();
+                    listas++;
+                    Debug.Log("[Animaciones] " + id + ": listo con rig de Blender (" + pc2 + ")");
+                    continue;
+                }
+
                 // 1) personaje: rig humanoide, crea el avatar
                 var ip = AssetImporter.GetAtPath(pPers) as ModelImporter;
                 ip.animationType = ModelImporterAnimationType.Human;

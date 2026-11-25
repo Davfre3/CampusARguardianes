@@ -25,8 +25,8 @@ namespace CampusAR
         void Awake()
         {
             activo = PlayerPrefs.GetInt("sonido", 1) == 1;
-            sfx = gameObject.AddComponent<AudioSource>(); sfx.playOnAwake = false; sfx.spatialBlend = 0f;
-            musica = gameObject.AddComponent<AudioSource>(); musica.playOnAwake = false; musica.loop = true; musica.spatialBlend = 0f; musica.volume = 0.16f;
+            sfx = gameObject.AddComponent<AudioSource>(); sfx.playOnAwake = false; sfx.volume = 1f; sfx.spatialBlend = 0f;
+            musica = gameObject.AddComponent<AudioSource>(); musica.playOnAwake = false; musica.loop = true; musica.spatialBlend = 0f; musica.volume = 0.35f;
 
             cClic = Cargar("clic") ?? Tono("clic", 0.05f, new[] { 1200f }, 0.35f);
             cAcierto = Cargar("acierto") ?? Notas("acierto", 0.13f, 0.35f, 523.25f, 659.25f, 783.99f, 1046.5f);

@@ -27,7 +27,7 @@ namespace CampusAR
                 bool ok = ProgressService.EstaCompletada(e.stationId);
                 if (iconos != null && i < iconos.Length && iconos[i] != null)
                 {
-                    iconos[i].sprite = e.insigniaIcono; iconos[i].enabled = e.insigniaIcono != null;
+                    iconos[i].sprite = e.Icono(); iconos[i].enabled = e.Icono() != null;
                     iconos[i].color = ok ? Color.white : new Color(0.2f, 0.2f, 0.24f, 0.85f);
                 }
                 filas[i].text = (ok ? "[X] " : "[  ] ") + e.mascotaNombre + " — " + e.displayName +

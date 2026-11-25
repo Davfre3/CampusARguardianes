@@ -252,11 +252,13 @@ namespace CampusAR
             if (etiquetaGirar != null) etiquetaGirar.text = fx != null && fx.Girando ? "Parar" : "Girar";
             if (etiquetaCaminar != null) etiquetaCaminar.text = fx != null && fx.Caminando ? "Parar" : "Caminar";
             if (etiquetaBailar != null) etiquetaBailar.text = fx != null && fx.Bailando ? "Parar" : "Bailar";
-            if (joystick != null) joystick.gameObject.SetActive(fx != null && fx.Caminando && panelAcciones != null && panelAcciones.activeSelf);
+            if (joystick != null) joystick.gameObject.SetActive(fx != null && panelAcciones != null && panelAcciones.activeSelf);
         }
 
         public void GirarMascota() { var fx = FxActual(); if (fx == null) return; fx.AlternarGiro(); RefrescarEtiquetasAcciones(); }
         public void CaminarMascota() { var fx = FxActual(); if (fx == null) return; fx.AlternarCaminar(); RefrescarEtiquetasAcciones(); }
+        public void GolpearMascota() { var fx = FxActual(); if (fx == null) return; fx.Golpear(); }
+        public void EscribirMascota() { var fx = FxActual(); if (fx == null) return; fx.Escribir(); }
         public void BailarMascota() { var fx = FxActual(); if (fx == null) return; fx.AlternarBaile(); RefrescarEtiquetasAcciones(); }
 
         Coroutine burbujaCo;

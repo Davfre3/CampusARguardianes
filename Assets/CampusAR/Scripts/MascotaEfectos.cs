@@ -33,7 +33,9 @@ namespace CampusAR
         Vector2 mov;                       // joystick (x = derecha, y = adelante, respecto a la cámara)
         Vector3 desp;                      // desplazamiento acumulado sobre la placa (m, local)
         float yawMov;                      // hacia dónde mira al caminar
-        const float RadioMax = 0.30f, Velocidad = 0.14f;
+        const float RadioMax = 1.6f, Velocidad = 0.30f;
+        Vector3 despPrev, velocidad; Vector3 posAro; bool arrastrando; Vector3 offArrastre; float giroPrevDedos; bool tieneGiroDedos;
+        float tAccion = -99f; int tipoAccion; bool impactoHecho; float tTecla;
         Animator anim;                     // si el modelo trae esqueleto (Mixamo), se usan sus clips
         bool tieneAnim;
         public bool Girando { get { return girando; } }
@@ -46,6 +48,8 @@ namespace CampusAR
         public void AlternarBaile() { bailando = !bailando; if (bailando) { girando = false; caminando = false; tBaile = 0f; } mov = Vector2.zero; tUltimaInteraccion = UltimaGlobal = Time.unscaledTime; AudioManager.Mascota(); Chispas(16); }
         public void VolverAlCentro() { desp = Vector3.zero; }
         public void Saltar() { tHop = Time.unscaledTime; tUltimaInteraccion = UltimaGlobal = Time.unscaledTime; AudioManager.Mascota(); Chispas(18); }
+        public void Golpear() { tAccion = Time.unscaledTime; tipoAccion = 1; impactoHecho = false; tUltimaInteraccion = UltimaGlobal = Time.unscaledTime; if (tieneAnim) anim.SetTrigger("Golpear"); }
+        public void Escribir() { tAccion = Time.unscaledTime; tipoAccion = 2; tTecla = 0f; tUltimaInteraccion = UltimaGlobal = Time.unscaledTime; if (tieneAnim) anim.SetTrigger("Escribir"); }
         public void DetenerModos() { girando = caminando = bailando = false; mov = Vector2.zero; }
 
         void Chispas(int n)
@@ -67,7 +71,7 @@ namespace CampusAR
             anim = modelo.GetComponentInChildren<Animator>(true);
             tieneAnim = anim != null && anim.runtimeAnimatorController != null;
             escalaModelo = modelo.localScale; posModelo = modelo.localPosition; rotModelo = modelo.localRotation;
-            if (aro != null) escalaAro = aro.localScale;
+            if (aro != null) { escalaAro = aro.localScale; posAro = aro.localPosition; }
 
             var go = new GameObject("Etiqueta");
             go.transform.SetParent(transform, false);
@@ -88,7 +92,7 @@ namespace CampusAR
         {
             t0 = Time.unscaledTime;
             yawUsuario = 0f; zoom = 1f; tocando = false; tUltimaInteraccion = -99f;
-            girando = caminando = bailando = false; yawAuto = 0f; wCaminar = 0f; wBaile = 0f; desp = Vector3.zero; mov = Vector2.zero;
+            girando = caminando = bailando = false; yawAuto = 0f; wCaminar = 0f; wBaile = 0f; desp = Vector3.zero; despPrev = Vector3.zero; velocidad = Vector3.zero; arrastrando = false; mov = Vector2.zero;
             OrientarDeFrente();
             Aplicar(0f);
             if (defActual != null) { Chispas(20); AudioManager.Mascota(); }
@@ -99,7 +103,7 @@ namespace CampusAR
         {
             t0 = Time.unscaledTime;
             yawUsuario = 0f; zoom = 1f; tUltimaInteraccion = -99f;
-            girando = caminando = bailando = false; yawAuto = 0f; wCaminar = 0f; wBaile = 0f; desp = Vector3.zero; mov = Vector2.zero;
+            girando = caminando = bailando = false; yawAuto = 0f; wCaminar = 0f; wBaile = 0f; desp = Vector3.zero; despPrev = Vector3.zero; velocidad = Vector3.zero; arrastrando = false; mov = Vector2.zero;
             OrientarDeFrente();
             Chispas(20); AudioManager.Mascota();
         }
@@ -144,16 +148,19 @@ namespace CampusAR
                     {
                         if (activos >= 2 && c1 != null)
                         {
-                            float dist = Vector2.Distance(c0.position.ReadValue(), c1.position.ReadValue());
+                            Vector2 p0 = c0.position.ReadValue(), p1 = c1.position.ReadValue();
+                            float dist = Vector2.Distance(p0, p1);
                             if (distanciaPrev > 1f) Zoom(dist / distanciaPrev);
-                            distanciaPrev = dist; seMovio = true;
+                            distanciaPrev = dist; seMovio = true; arrastrando = false;
+                            float ang = Mathf.Atan2(p1.y - p0.y, p1.x - p0.x) * Mathf.Rad2Deg;
+                            if (tieneGiroDedos) yawUsuario -= Mathf.DeltaAngle(giroPrevDedos, ang);
+                            giroPrevDedos = ang; tieneGiroDedos = true;
                         }
                         else
                         {
-                            Vector2 dl = c0.delta.ReadValue();
                             if ((c0.position.ReadValue() - posInicio).sqrMagnitude > 400f) seMovio = true;
-                            if (seMovio) Girar(dl.x);
-                            distanciaPrev = 0f;
+                            if (seMovio) Girar(c0.delta.ReadValue().x);
+                            distanciaPrev = 0f; tieneGiroDedos = false;
                         }
                     }
                     return;
@@ -183,15 +190,30 @@ namespace CampusAR
                 Zoom(1f + Mathf.Sign(rueda) * 0.06f);
         }
 
+        // Arrastrar con un dedo: la mascota sigue al dedo sobre el plano de la placa (como los filtros de Instagram/TikTok).
+        void Arrastrar(Vector2 pantalla)
+        {
+            var cam = Camera.main; if (cam == null) return;
+            var plano = new Plane(transform.up, transform.position);
+            Ray r = cam.ScreenPointToRay(pantalla);
+            if (!plano.Raycast(r, out float d)) return;
+            Vector3 loc = transform.InverseTransformPoint(r.GetPoint(d)); loc.y = 0f;
+            if (!arrastrando) { arrastrando = true; offArrastre = desp - loc; }
+            Vector3 objetivo = loc + offArrastre;
+            if (objetivo.magnitude > RadioMax) objetivo = objetivo.normalized * RadioMax;
+            desp = Vector3.Lerp(desp, objetivo, 0.5f);
+            tUltimaInteraccion = UltimaGlobal = Time.unscaledTime;
+        }
+
         void FinToque()
         {
-            tocando = false;
+            tocando = false; arrastrando = false; tieneGiroDedos = false;
             if (!bloqueado && !seMovio && Time.unscaledTime - tInicioToque < 0.3f) Saltar();
         }
 
         void Girar(float dx) { yawUsuario -= dx * 0.4f; tUltimaInteraccion = UltimaGlobal = Time.unscaledTime; }
 
-        void Zoom(float factor) { zoom = Mathf.Clamp(zoom * factor, 0.5f, 2.2f); tUltimaInteraccion = UltimaGlobal = Time.unscaledTime; }
+        void Zoom(float factor) { zoom = Mathf.Clamp(zoom * factor, 0.35f, 4f); tUltimaInteraccion = UltimaGlobal = Time.unscaledTime; }
 
         // ---------------- animación ----------------
         void Aplicar(float t)
@@ -203,7 +225,7 @@ namespace CampusAR
             float dt = Time.unscaledDeltaTime;
             if (girando) yawAuto -= 110f * dt;
             // caminar con joystick: se mueve sobre el plano de la placa, relativo a la cámara
-            float mag = caminando ? mov.magnitude : 0f;
+            float mag = mov.magnitude;
             if (mag > 0.05f)
             {
                 Vector3 dirLocal = DireccionLocal(mov);
@@ -211,7 +233,12 @@ namespace CampusAR
                 if (desp.magnitude > RadioMax) desp = desp.normalized * RadioMax;
                 yawMov = Vector3.SignedAngle(Vector3.back, dirLocal, Vector3.up);
             }
-            wCaminar = Mathf.MoveTowards(wCaminar, mag > 0.05f ? 1f : 0f, dt * 4f);
+            Vector3 vv = dt > 1e-5f ? (desp - despPrev) / dt : Vector3.zero; despPrev = desp;
+            velocidad = Vector3.Lerp(velocidad, vv, 0.25f);
+            bool seMueve = velocidad.magnitude > 0.035f;
+            if (seMueve && mag <= 0.05f) yawMov = Vector3.SignedAngle(Vector3.back, velocidad.normalized, Vector3.up);
+            mag = seMueve ? 1f : 0f;
+            wCaminar = Mathf.MoveTowards(wCaminar, seMueve ? 1f : 0f, dt * 5f);
             wBaile = Mathf.MoveTowards(wBaile, bailando ? 1f : 0f, dt * 3f);
             if (bailando) tBaile += dt;
             if (tieneAnim) { anim.SetBool("Caminar", mag > 0.05f); anim.SetBool("Baile", bailando); }
@@ -229,7 +256,23 @@ namespace CampusAR
             }
 
             float flota = 0.008f * Mathf.Sin(t * 2.2f) + 0.008f;
-            modelo.localScale = escalaModelo * (k * zoom);
+            // acciones: golpear (embestida + impacto) y escribir (rebote de dedos)
+            float ta = Time.unscaledTime - tAccion; float avance = 0f, squash = 0f, rollAcc = 0f;
+            if (tipoAccion == 1 && ta >= 0f && ta < 1.5f)
+            {
+                float u = ta / 1.5f;
+                avance = (u > .3f && u < .6f) ? 0.07f * Mathf.Sin(Mathf.PI * (u - .3f) / .3f) : 0f;
+                if (!tieneAnim) { rollAcc = u < .3f ? -14f * (u / .3f) : (u < .6f ? 20f * Mathf.Sin(Mathf.PI * (u - .3f) / .3f) : 0f); }
+                if (!impactoHecho && u >= .42f) { impactoHecho = true; Chispas(26); AudioManager.Mascota(); }
+            }
+            else if (tipoAccion == 2 && ta >= 0f && ta < 2.4f)
+            {
+                float env = Mathf.Clamp01(Mathf.Min(ta, 2.4f - ta) * 4f);
+                if (!tieneAnim) { squash = 0.03f * env * Mathf.Abs(Mathf.Sin(ta * 8f * Mathf.PI)); rollAcc = 4f * env * Mathf.Sin(ta * 8f * Mathf.PI); }
+                if (ta - tTecla > 0.15f) { tTecla = ta; AudioManager.Clic(); }
+            }
+            Vector3 frenteLocal = Quaternion.AngleAxis(yawFrente + yawUsuario, Vector3.up) * Vector3.back;
+            modelo.localScale = escalaModelo * (k * zoom * (1f - squash));
             Vector3 paseo = desp; float yawBase = yawFrente + yawUsuario + giro + vuelta + yawAuto; float roll = 0f, paso = 0f;
             if (wCaminar > 0.001f)
             {
@@ -252,9 +295,11 @@ namespace CampusAR
                 yawBase += giroBaile * wBaile;
                 if (Mathf.Floor(tBaile * 2f) != Mathf.Floor((tBaile - dt) * 2f) && ((int)(tBaile * 2f)) % 4 == 0) Chispas(8);
             }
-            modelo.localRotation = Quaternion.AngleAxis(yawBase, Vector3.up) * Quaternion.AngleAxis(roll, Vector3.forward) * rotModelo;
+            modelo.localRotation = Quaternion.AngleAxis(yawBase, Vector3.up) * Quaternion.AngleAxis(roll + rollAcc, Vector3.forward) * rotModelo;
+            Vector3 dirMira = Quaternion.AngleAxis(yawBase, Vector3.up) * Vector3.back;
+            modelo.localPosition = posModelo + new Vector3(paseo.x, flota + salto + paso, paseo.z) + dirMira * avance;
 
-            if (aro != null) aro.localScale = escalaAro * (k * (1f + 0.07f * Mathf.Sin(t * 3.2f)) * Mathf.Max(1f, zoom));
+            if (aro != null) { aro.localScale = escalaAro * (k * (1f + 0.07f * Mathf.Sin(t * 3.2f)) * Mathf.Max(1f, zoom)); aro.localPosition = posAro + new Vector3(paseo.x, 0f, paseo.z); }
 
             var cam = Camera.main;
             if (etiqueta != null && cam != null)

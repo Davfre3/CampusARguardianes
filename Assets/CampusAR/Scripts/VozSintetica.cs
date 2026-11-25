@@ -64,16 +64,33 @@ namespace CampusAR
             if (tts == null || !listo) { pendiente = texto; Iniciar(); return; }
             try { tts.Call<int>("speak", texto, 0, null, "campusar"); }   // 0 = QUEUE_FLUSH
             catch (System.Exception e) { Debug.LogWarning("[CampusAR] Voz: " + e.Message); }
+#elif UNITY_EDITOR_WIN
+            Debug.Log("[CampusAR] (voz) " + texto);
+            try
+            {
+                if (proc != null && !proc.HasExited) proc.Kill();
+                string t = texto.Replace("'", " ").Replace("\"", " ").Replace("\n", " ");
+                string cmd = "Add-Type -AssemblyName System.Speech; $s=New-Object System.Speech.Synthesis.SpeechSynthesizer; " +
+                    "foreach($v in $s.GetInstalledVoices()){ if($v.VoiceInfo.Culture.Name -like 'es*'){ $s.SelectVoice($v.VoiceInfo.Name); break } }; $s.Speak('" + t + "')";
+                var psi = new System.Diagnostics.ProcessStartInfo("powershell", "-NoProfile -WindowStyle Hidden -Command \"" + cmd + "\"") { CreateNoWindow = true, UseShellExecute = false };
+                proc = System.Diagnostics.Process.Start(psi);
+            }
+            catch (System.Exception e) { Debug.LogWarning("[CampusAR] Voz (editor): " + e.Message); }
 #else
             Debug.Log("[CampusAR] (voz) " + texto);
 #endif
         }
+#if UNITY_EDITOR_WIN
+        static System.Diagnostics.Process proc;
+#endif
 
         public static void Detener()
         {
 #if UNITY_ANDROID && !UNITY_EDITOR
             pendiente = null;
             try { if (tts != null && listo) tts.Call<int>("stop"); } catch { }
+#elif UNITY_EDITOR_WIN
+            try { if (proc != null && !proc.HasExited) proc.Kill(); } catch { }
 #endif
         }
     }

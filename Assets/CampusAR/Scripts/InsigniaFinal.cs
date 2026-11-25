@@ -16,7 +16,7 @@ namespace CampusAR
             {
                 if (iconos[i] == null) continue;
                 var e = catalogo != null && i < catalogo.estaciones.Length ? catalogo.estaciones[i] : null;
-                iconos[i].sprite = e != null ? e.insigniaIcono : null;
+                iconos[i].sprite = e != null ? e.Icono() : null;
                 iconos[i].enabled = iconos[i].sprite != null;
                 var pop = iconos[i].GetComponent<PopIn>();
                 if (pop != null) { pop.retardo = 0.25f + 0.3f * i; pop.enabled = false; pop.enabled = true; }

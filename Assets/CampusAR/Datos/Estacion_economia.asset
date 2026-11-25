@@ -19,6 +19,10 @@ MonoBehaviour:
   colorFacultad: {r: 0.878, g: 0.125, b: 0.169, a: 1}
   grupoNombre: "Econom\xEDa"
   insigniaNombre: Analista
+  insigniaIcono: {fileID: 0}
+  infoCorta: "\xA1Hola! Soy el Toro de Econom\xEDa. Aqu\xED aprendes c\xF3mo se mueven
+    el dinero, los precios y los mercados para tomar mejores decisiones. Puedes estudiar
+    Econom\xEDa, Econom\xEDa y Finanzas o Econom\xEDa y Negocios Internacionales."
   mensajePersonalidad: Observa los datos y encuentra la mejor lectura.
   mascotPrefab: {fileID: 8569139678747585368, guid: 50639377a0ca19048bb5c64803fbc70c, type: 3}
   markerImage: {fileID: 2800000, guid: 16134b41da629c84ebdd7e07c36d13e5, type: 3}
@@ -54,17 +58,17 @@ MonoBehaviour:
   serviceHours: "Atenci\xF3n presencial: lunes a viernes, de 10:00 a. m. a 6:45 p.
     m."
   webUrl: https://davfre3.github.io/campus-ar-guardians-web/toro.html
-  ilustracion: {fileID: 21300000, guid: d8b2a8f2708479f4790d68ff912b3e6a, type: 3}
+  ilustracion: {fileID: 21300000, guid: 07e355d35f891464ca1c7598a3daa52b, type: 3}
   mapUrl: 
   quiz:
-    pregunta: "Si los precios aumentan de manera general y sostenida, \xBFqu\xE9
-      fen\xF3meno describe mejor la situaci\xF3n?"
+    pregunta: "\xBFQu\xE9 estudia la Econom\xEDa?"
     opciones:
-    - "Inflaci\xF3n"
-    - "Exportaci\xF3n"
-    - Productividad
+    - "C\xF3mo se usan el dinero y los recursos"
+    - "C\xF3mo se construyen puentes"
+    - "C\xF3mo se curan las enfermedades"
     indiceCorrecto: 0
-    explicacion: "Un aumento general y sostenido de los precios se llama inflaci\xF3n."
-    pista: "Piensa en qu\xE9 pasa cuando, mes tras mes, casi todo cuesta m\xE1s."
+    explicacion: "La Econom\xEDa estudia c\xF3mo personas, empresas y pa\xEDses usan
+      el dinero y los recursos para tomar decisiones."
+    pista: "Piensa en dinero, precios y en c\xF3mo decidimos qu\xE9 comprar."
   contentVersion: "0.3 (contenido de la gu\xEDa de gamificaci\xF3n y del zip; mapa
     fuera por decisi\xF3n del equipo)"

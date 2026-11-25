@@ -19,6 +19,10 @@ MonoBehaviour:
   colorFacultad: {r: 0.122, g: 0.31, b: 0.878, a: 1}
   grupoNombre: "Administraci\xF3n y negocios"
   insigniaNombre: Estratega
+  insigniaIcono: {fileID: 0}
+  infoCorta: "\xA1Hola! Soy el Lobo de Administraci\xF3n y Negocios. Aqu\xED aprendes
+    a dirigir empresas, liderar equipos y tomar buenas decisiones. Puedes estudiar
+    Administraci\xF3n, Marketing o Negocios Internacionales."
   mensajePersonalidad: Piensa como quien dirige y toma decisiones.
   mascotPrefab: {fileID: 5993528057466213680, guid: c110a61c68b2b8246aabcf901fdf6378, type: 3}
   markerImage: {fileID: 2800000, guid: 00d9f9f191998cc4fa413f9c1fa36d1b, type: 3}
@@ -64,18 +68,17 @@ MonoBehaviour:
   serviceHours: "Atenci\xF3n presencial: lunes a viernes, de 10:00 a. m. a 6:45 p.
     m."
   webUrl: https://davfre3.github.io/campus-ar-guardians-web/lobo.html
-  ilustracion: {fileID: 21300000, guid: c0469d0d24b39e144a46fc56ae547450, type: 3}
+  ilustracion: {fileID: 21300000, guid: a8a517ff7b08ce147ba364b2290eb2e8, type: 3}
   mapUrl: 
   quiz:
-    pregunta: "Una empresa desea entrar a un nuevo mercado. \xBFQu\xE9 deber\xEDa
-      revisar primero?"
+    pregunta: "\xBFQu\xE9 hace una persona que estudia Administraci\xF3n y Negocios?"
     opciones:
-    - Demanda y competencia
-    - Color del logo
-    - "Tama\xF1o de la oficina"
+    - Organiza y dirige empresas
+    - Repara computadoras
+    - Opera a pacientes
     indiceCorrecto: 0
-    explicacion: "Antes de entrar a un mercado conviene saber cu\xE1nta demanda hay
-      y qui\xE9n m\xE1s compite."
-    pista: "Piensa en qui\xE9nes comprar\xEDan y qui\xE9nes ya venden algo parecido."
+    explicacion: "Quien estudia Administraci\xF3n aprende a organizar equipos, recursos
+      y empresas para lograr sus metas."
+    pista: "Piensa en qui\xE9n dirige un negocio o un equipo de trabajo."
   contentVersion: "0.3 (contenido de la gu\xEDa de gamificaci\xF3n y del zip; mapa
     fuera por decisi\xF3n del equipo)"

@@ -33,10 +33,10 @@ namespace CampusAR
         void MostrarInsignia(bool obtenida, bool animar)
         {
             if (insigniaImg == null) return;
-            bool hay = est != null && est.insigniaIcono != null;
+            bool hay = est != null && est.Icono() != null;
             insigniaImg.gameObject.SetActive(hay);
             if (!hay) return;
-            insigniaImg.sprite = est.insigniaIcono;
+            insigniaImg.sprite = est.Icono();
             insigniaImg.color = obtenida ? Color.white : new Color(0.22f, 0.22f, 0.26f, 0.9f);
             var pop = insigniaImg.GetComponent<PopIn>();
             if (pop != null) { pop.enabled = false; if (animar) pop.enabled = true; else insigniaImg.transform.localScale = Vector3.one; }

@@ -37,7 +37,19 @@ namespace CampusAR
         public Color colorFacultad = Color.white;
         public string grupoNombre;          // p. ej. "Administración y negocios"
         public string insigniaNombre;       // p. ej. "Estratega"
-        public Sprite insigniaIcono;        // dibujo de la insignia (Assets/CampusAR/Insignias)
+        public Sprite insigniaIcono;
+        Sprite _iconoCache;
+        // Devuelve el dibujo de la insignia; si no quedó asignado en el asset, lo carga de Resources/Insignias.
+        public Sprite Icono()
+        {
+            if (insigniaIcono != null) return insigniaIcono;
+            if (_iconoCache == null)
+            {
+                var t = Resources.Load<Texture2D>("Insignias/Insignia_" + stationId);
+                if (t != null) _iconoCache = Sprite.Create(t, new Rect(0, 0, t.width, t.height), new Vector2(0.5f, 0.5f), 100f);
+            }
+            return _iconoCache;
+        }        // dibujo de la insignia (Assets/CampusAR/Insignias)
         [TextArea(2, 5)] public string infoCorta;   // mensaje breve de la mascota (burbuja y voz)
         public string mensajePersonalidad;  // frase corta de la mascota
 

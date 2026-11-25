@@ -19,6 +19,10 @@ MonoBehaviour:
   colorFacultad: {r: 0.965, g: 0.71, b: 0, a: 1}
   grupoNombre: Derecho y Ciencias Sociales
   insigniaNombre: Explorador social
+  insigniaIcono: {fileID: 0}
+  infoCorta: "\xA1Hola! Soy el Le\xF3n de Derecho y Ciencias Sociales. Aqu\xED aprendes
+    sobre las leyes, la justicia y el comportamiento de las personas. Puedes estudiar
+    Derecho, Derecho Corporativo o Psicolog\xEDa."
   mensajePersonalidad: Analiza el caso y comprende a las personas y su entorno.
   mascotPrefab: {fileID: 6298170682987873505, guid: 3e9390270f9b1ec48ad310d98a555cf9, type: 3}
   markerImage: {fileID: 2800000, guid: dbc7c7d6a35495742ae8896dd3959d5e, type: 3}
@@ -54,17 +58,17 @@ MonoBehaviour:
   serviceHours: "Atenci\xF3n presencial: lunes a viernes, de 10:00 a. m. a 6:45 p.
     m."
   webUrl: https://davfre3.github.io/campus-ar-guardians-web/leon.html
-  ilustracion: {fileID: 21300000, guid: 411ffa7a71a98524a87260c0bdfe0f62, type: 3}
+  ilustracion: {fileID: 21300000, guid: ef6bc98a414742f4aa0cf29979f87d85, type: 3}
   mapUrl: 
   quiz:
-    pregunta: "Antes de decidir en un conflicto, \xBFqu\xE9 acci\xF3n es m\xE1s adecuada?"
+    pregunta: "\xBFQu\xE9 estudia el Derecho?"
     opciones:
-    - Revisar hechos y normas/contexto
-    - Elegir al azar
-    - Ignorar a las partes
+    - Las leyes y las normas para vivir en sociedad
+    - Los planetas y las estrellas
+    - Los motores de los autos
     indiceCorrecto: 0
-    explicacion: "Una decisi\xF3n justa parte de conocer los hechos, las normas y
-      el contexto."
-    pista: "Antes de decidir, hay que saber qu\xE9 pas\xF3 y qu\xE9 reglas aplican."
+    explicacion: El Derecho estudia las leyes y normas que ayudan a que las personas
+      convivan con justicia.
+    pista: Piensa en jueces, abogados y en las reglas que todos debemos cumplir.
   contentVersion: "0.3 (contenido de la gu\xEDa de gamificaci\xF3n y del zip; mapa
     fuera por decisi\xF3n del equipo)"

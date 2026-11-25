@@ -705,8 +705,9 @@ namespace CampusAR.EditorTools
             var ah = acc.gameObject.AddComponent<HorizontalLayoutGroup>();
             ah.spacing = 16; ah.childControlWidth = true; ah.childControlHeight = true; ah.childForceExpandWidth = true; ah.childForceExpandHeight = true;
             var bGirar = Btn(acc, "BtnGirar", "Girar", Boton, 140, 38);
-            var bCaminar = Btn(acc, "BtnCaminar", "Caminar", Boton, 140, 38);
             var bBailar = Btn(acc, "BtnBailar", "Bailar", new Color(0.62f, 0.25f, 0.80f, 1f), 140, 38);
+            var bGolpe = Btn(acc, "BtnGolpear", "Golpear", new Color(0.85f, 0.22f, 0.22f, 1f), 140, 38);
+            var bEscribe = Btn(acc, "BtnEscribir", "Escribir", new Color(0.15f, 0.55f, 0.75f, 1f), 140, 38);
             var bInfo = Btn(acc, "BtnInfo", "Info", new Color(0.95f, 0.65f, 0.10f, 1f), 140, 38);
             acc.gameObject.SetActive(false);
 
@@ -718,7 +719,7 @@ namespace CampusAR.EditorTools
             var bubOut = bub.gameObject.AddComponent<Outline>(); bubOut.effectColor = new Color(1f, 0.82f, 0.2f, 1f); bubOut.effectDistance = new Vector2(6, -6);
             bub.gameObject.SetActive(false);
 
-            // palanca para caminar (aparece al pulsar «Caminar»)
+            // palanca para caminar (siempre visible con la mascota)
             var jb = Rt("Joystick", hud);
             Anclar(jb, new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0), new Vector2(50, 400), new Vector2(340, 340));
             var jbImg = jb.gameObject.AddComponent<Image>(); jbImg.sprite = JoystickVirtual.Circulo(); jbImg.color = new Color(1f, 1f, 1f, 0.28f);
@@ -766,10 +767,9 @@ namespace CampusAR.EditorTools
             ctl.usarModelTargets = false;        // el tótem queda fuera: el disparador es la placa
             ctl.panelAcciones = acc.gameObject; ctl.burbuja = bub.gameObject; ctl.burbujaTexto = bubTxt;
             ctl.etiquetaGirar = bGirar.transform.Find("Etiqueta").GetComponent<TMP_Text>();
-            ctl.etiquetaCaminar = bCaminar.transform.Find("Etiqueta").GetComponent<TMP_Text>();
             ctl.etiquetaBailar = bBailar.transform.Find("Etiqueta").GetComponent<TMP_Text>();
             ctl.joystick = joy;
-            Al(bGirar, ctl.GirarMascota); Al(bCaminar, ctl.CaminarMascota); Al(bBailar, ctl.BailarMascota); Al(bInfo, ctl.InfoMascota); Al(bub, ctl.CerrarBurbuja);
+            Al(bGirar, ctl.GirarMascota); Al(bBailar, ctl.BailarMascota); Al(bGolpe, ctl.GolpearMascota); Al(bEscribe, ctl.EscribirMascota); Al(bInfo, ctl.InfoMascota); Al(bub, ctl.CerrarBurbuja);
             return hud.gameObject;
         }
 
