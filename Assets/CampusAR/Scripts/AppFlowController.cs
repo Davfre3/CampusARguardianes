@@ -204,6 +204,12 @@ namespace CampusAR
 
         public void AbrirRecorrido() { progreso.Refrescar(); Mostrar(panelRecorrido); }
 
+        public void AlternarSonido()
+        {
+            bool on = AudioManager.AlternarSonido();
+            MostrarAviso(on ? "Sonido activado" : "Sonido silenciado", 2f);
+        }
+
         public void AbrirInsignia()
         {
             if (!ProgressService.InsigniaDesbloqueada(catalogo)) { MostrarAviso("La insignia se desbloquea con las 4 estaciones."); return; }

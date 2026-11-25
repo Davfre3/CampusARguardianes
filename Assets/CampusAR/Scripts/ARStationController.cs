@@ -32,6 +32,9 @@ namespace CampusAR
         public TMP_Text estado;
         public GameObject guiaEscaneo, tarjetaEstacion, panelNoReconoce, panelPermiso;
         public TMP_Text tarjetaTitulo;
+        [Header("Acciones de la mascota")]
+        public GameObject panelAcciones, burbuja;
+        public TMP_Text burbujaTexto, etiquetaGirar, etiquetaCaminar;
         public float segundosParaAyuda = 10f;
         public float retardoMenu = 0.15f;   // el menú aparece directamente tras escanear la placa
 
@@ -226,8 +229,55 @@ namespace CampusAR
             }
         }
 
-        [Tooltip("Activa también el reconocimiento por modelo 3D impreso (Model Targets).")]
-        public bool usarModelTargets = true;
+        [Tooltip("Reconocimiento por modelo 3D impreso (tótem). Desactivado: el disparador es la placa.")]
+        public bool usarModelTargets = false;
+
+        // ---------- botones de la mascota: Girar / Caminar / Info ----------
+        MascotaEfectos FxActual()
+        {
+            return actual != null && actual.contenido != null ? actual.contenido.GetComponentInChildren<MascotaEfectos>(true) : null;
+        }
+
+        void RefrescarEtiquetasAcciones()
+        {
+            var fx = FxActual();
+            if (etiquetaGirar != null) etiquetaGirar.text = fx != null && fx.Girando ? "Parar" : "Girar";
+            if (etiquetaCaminar != null) etiquetaCaminar.text = fx != null && fx.Caminando ? "Parar" : "Caminar";
+        }
+
+        public void GirarMascota() { var fx = FxActual(); if (fx == null) return; fx.AlternarGiro(); RefrescarEtiquetasAcciones(); }
+        public void CaminarMascota() { var fx = FxActual(); if (fx == null) return; fx.AlternarCaminar(); RefrescarEtiquetasAcciones(); }
+
+        Coroutine burbujaCo;
+        public void InfoMascota()
+        {
+            var fx = FxActual();
+            if (actual == null || fx == null) return;
+            var d = actual.def;
+            string texto = !string.IsNullOrWhiteSpace(d.infoCorta) ? d.infoCorta : d.mensajePersonalidad;
+            fx.Saltar();
+            if (burbuja != null && burbujaTexto != null)
+            {
+                burbujaTexto.text = texto;
+                burbuja.SetActive(true);
+                if (burbujaCo != null) StopCoroutine(burbujaCo);
+                burbujaCo = StartCoroutine(OcultarBurbuja(Mathf.Clamp(texto.Length * 0.075f, 7f, 20f)));
+            }
+            VozSintetica.Hablar(texto);
+        }
+
+        IEnumerator OcultarBurbuja(float s)
+        {
+            yield return new WaitForSecondsRealtime(s);
+            CerrarBurbuja();
+        }
+
+        public void CerrarBurbuja()
+        {
+            if (burbujaCo != null) { StopCoroutine(burbujaCo); burbujaCo = null; }
+            if (burbuja != null) burbuja.SetActive(false);
+            VozSintetica.Detener();
+        }
 
         // Orden de prueba de las vistas guía: primero la frontal (índice 1), luego el resto.
         // Vuforia solo reconoce el objeto desde la vista guía ACTIVA; sin esto queda fija la vista 0 (aérea).
@@ -293,6 +343,8 @@ namespace CampusAR
             if (e == null || e.tracked || actual != e) yield break;
             {
                 e.contenido.SetActive(false);
+                if (panelAcciones != null) panelAcciones.SetActive(false);
+                CerrarBurbuja();
                 Estado("Seguimiento perdido. Vuelve a enfocar la imagen de " + actual.def.displayName + ".");
                 if (guiaEscaneo != null) guiaEscaneo.SetActive(true);
             }
@@ -325,13 +377,14 @@ namespace CampusAR
             bool recuperado = !cambio && !e.contenido.activeSelf;
             if (cambio)
             {
-                if (actual != null) actual.contenido.SetActive(false);   // RF04: una sola mascota
+                if (actual != null) { var fx0 = FxActual(); if (fx0 != null) fx0.DetenerModos(); actual.contenido.SetActive(false); CerrarBurbuja(); }   // RF04: una sola mascota
                 actual = e;
                 flow.EstacionActual = e.def;
                 if (flow.EnRaiz) StartCoroutine(AbrirMenuTras(e));
                 tarjetaTitulo.text = e.def.displayName + " · " + e.def.mascotaNombre;
             }
             if (visible) AjustarEscala(e);
+            if (cambio) RefrescarEtiquetasAcciones();
             e.contenido.SetActive(visible);
             if (visible) Debug.Log("[CampusAR] Mostrando mascota " + e.def.mascotaNombre + " (activa=" + e.contenido.activeInHierarchy + ")");
             Mostrar(true);
@@ -350,6 +403,8 @@ namespace CampusAR
         void Mostrar(bool detectada)
         {
             if (tarjetaEstacion != null) tarjetaEstacion.SetActive(detectada);
+            if (panelAcciones != null) panelAcciones.SetActive(detectada);
+            if (!detectada) CerrarBurbuja();
             if (guiaEscaneo != null && !detectada) guiaEscaneo.SetActive(true);
         }
 

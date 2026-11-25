@@ -37,6 +37,38 @@ namespace CampusAR.EditorTools
             public int correcta;
         }
 
+        static readonly Dictionary<string, string> InfoCorta = new Dictionary<string, string>
+        {
+            {"admin", "¡Hola! Soy el Lobo de Administración y Negocios. Aquí aprendes a dirigir empresas, liderar equipos y tomar buenas decisiones. Puedes estudiar Administración, Marketing o Negocios Internacionales."},
+            {"ingenieria", "¡Hola! Soy el Vikingo de Ingeniería. Aquí aprendes a crear soluciones con tecnología: software, datos, inteligencia artificial y procesos industriales."},
+            {"economia", "¡Hola! Soy el Toro de Economía. Aquí aprendes cómo se mueven el dinero, los precios y los mercados para tomar mejores decisiones. Puedes estudiar Economía, Economía y Finanzas o Economía y Negocios Internacionales."},
+            {"ciencias", "¡Hola! Soy el León de Derecho y Ciencias Sociales. Aquí aprendes sobre las leyes, la justicia y el comportamiento de las personas. Puedes estudiar Derecho, Derecho Corporativo o Psicología."},
+        };
+
+        static Sprite CargarInsignia(string id)
+        {
+            string ruta = Raiz + "/Insignias/Insignia_" + id + ".png";
+            if (!File.Exists(ruta)) return null;
+            var ti = AssetImporter.GetAtPath(ruta) as TextureImporter;
+            if (ti != null && (ti.textureType != TextureImporterType.Sprite || !ti.alphaIsTransparency))
+            {
+                ti.textureType = TextureImporterType.Sprite; ti.alphaIsTransparency = true; ti.mipmapEnabled = false;
+                ti.SaveAndReimport();
+            }
+            return AssetDatabase.LoadAssetAtPath<Sprite>(ruta);
+        }
+
+        // Material sin luz para las chispas 3D (en Resources para que entre en la build con su shader).
+        static void AsegurarFxMat()
+        {
+            string p = RutaRecursos + "/FxMat.mat";
+            if (AssetDatabase.LoadAssetAtPath<Material>(p) != null) return;
+            var sh = Shader.Find("Universal Render Pipeline/Unlit");
+            if (sh == null) return;
+            var m = new Material(sh); m.SetColor("_BaseColor", Color.white);
+            AssetDatabase.CreateAsset(m, p);
+        }
+
         static readonly Est[] Estaciones = new Est[]
         {
         new Est{ id="admin", target="ADMIN_LOBO", nombre="Administración", grupo="Administración y negocios", mascota="Lobo", color=new Color(0.122f,0.310f,0.878f), fbx="Business_Wolf_texture",
@@ -48,7 +80,7 @@ namespace CampusAR.EditorTools
                 new CareerLink{nombre="Administración y Marketing", url="https://www.ue.edu.pe/pregrado/carreras/administracion-marketing", urlMalla="https://www.ue.edu.pe/pregrado/carreras/administracion-marketing", urlCertificaciones="https://www.ue.edu.pe/pregrado/images/files/2025/FCEA/certificaciones/Administracion%20y%20Marketing.pdf", urlEspecializacion="https://www.ue.edu.pe/pregrado/images/files/2025/FCEA/especializaciones/Administracion%20y%20Marketing.pdf"},
                 new CareerLink{nombre="Administración y Negocios Internacionales", url="https://www.ue.edu.pe/pregrado/carreras/administracion-y-negocios-internacionales", urlMalla="https://www.ue.edu.pe/pregrado/carreras/administracion-y-negocios-internacionales", urlCertificaciones="https://www.ue.edu.pe/pregrado/images/files/2025/FCEA/certificaciones/Administracion%20y%20Negocios%20Internacionales.pdf", urlEspecializacion="https://www.ue.edu.pe/pregrado/images/files/2025/FCEA/especializaciones/Administracion%20y%20Negocios%20Internacionales.pdf"},
                 new CareerLink{nombre="Comunicación Empresarial y Marketing Digital", url="https://www.ue.edu.pe/pregrado/carreras/comunicacion-empresarial-y-marketing-digital", urlMalla="https://www.ue.edu.pe/pregrado/carreras/comunicacion-empresarial-y-marketing-digital", urlCertificaciones="https://www.ue.edu.pe/pregrado/images/files/2025/FCEA/certificaciones/Comunicacion%20Empresarial%20y%20Marketing%20Digital.pdf", urlEspecializacion="https://www.ue.edu.pe/pregrado/images/files/2025/FCEA/especializaciones/Comunicacion%20Empresarial%20y%20Marketing%20Digital.pdf"} },
-            pregunta="Una empresa desea entrar a un nuevo mercado. ¿Qué debería revisar primero?", opciones=new[]{"Demanda y competencia","Color del logo","Tamaño de la oficina"}, correcta=0, explicacion="Antes de entrar a un mercado conviene saber cuánta demanda hay y quién más compite.", pista="Piensa en quiénes comprarían y quiénes ya venden algo parecido." },
+            pregunta="¿Qué hace una persona que estudia Administración y Negocios?", opciones=new[]{"Organiza y dirige empresas","Repara computadoras","Opera a pacientes"}, correcta=0, explicacion="Quien estudia Administración aprende a organizar equipos, recursos y empresas para lograr sus metas.", pista="Piensa en quién dirige un negocio o un equipo de trabajo." },
         new Est{ id="ingenieria", target="ING_VIKINGO", nombre="Ingeniería", grupo="Ingeniería", mascota="Vikingo", color=new Color(0.071f,0.600f,0.290f), fbx="Techno_Viking_texture",
             insignia="Innovador", mensaje="Resuelve el reto y construye una solución.",
             resumen="Ingeniería. Resuelve el reto y construye una solución. Estilo del reto: lógica, tecnología o innovación. En Carreras puedes abrir la malla, las certificaciones y las áreas de especialización de cada carrera en la página oficial.",
@@ -58,7 +90,7 @@ namespace CampusAR.EditorTools
                 new CareerLink{nombre="Ingeniería de Tecnologías de Información y Sistemas", url="https://www.ue.edu.pe/pregrado/images/files/2025/Mallas%20Curriculares/Ingenieria/Malla_Ingenieria%20_de_tecnologias_de_Informacion.pdf", urlMalla="https://www.ue.edu.pe/pregrado/images/files/2025/Mallas%20Curriculares/Ingenieria/Malla_Ingenieria%20_de_tecnologias_de_Informacion.pdf", urlCertificaciones="https://www.ue.edu.pe/pregrado/images/files/2025/Certificaciones/Ingenieria/Ingenieria%20de%20Tecnologias%20de%20Informacion%20y%20Sistemas_Certificados.pdf", urlEspecializacion="https://www.ue.edu.pe/pregrado/images/files/2025/Especializaciones/Ingenieria/Ingenieria%20de%20Tecnologias%20de%20Informacion%20y%20Sistemas_Especializacion.pdf"},
                 new CareerLink{nombre="Ingeniería en Ciencia de Datos", url="https://www.ue.edu.pe/pregrado/carreras/ingenieria-en-ciencia-de-datos", urlMalla="https://www.ue.edu.pe/pregrado/carreras/ingenieria-en-ciencia-de-datos", urlCertificaciones="https://www.ue.edu.pe/pregrado/images/files/2026/certificaciones/Certificacion-INGENIERIA-DE-CIENCIA-DE-DATOS.pdf", urlEspecializacion="https://www.ue.edu.pe/pregrado/images/files/2026/certificaciones/Areas-de-especializacion-INGENIERIA-DE-CIENCIA-DE-DATOS.pdf"},
                 new CareerLink{nombre="Ingeniería en Inteligencia Artificial", url="https://www.ue.edu.pe/pregrado/images/files/2025/Mallas%20Curriculares/Ingenieria/Malla_Ingenieria_en_Inteligencia%20Artificial.pdf", urlMalla="https://www.ue.edu.pe/pregrado/images/files/2025/Mallas%20Curriculares/Ingenieria/Malla_Ingenieria_en_Inteligencia%20Artificial.pdf", urlCertificaciones="https://www.ue.edu.pe/pregrado/images/files/2025/Certificaciones/Ingenieria/Ingenieria%20en%20Inteligencia%20Artificial_Certificados.pdf", urlEspecializacion="https://www.ue.edu.pe/pregrado/images/files/2025/Especializaciones/Ingenieria/Ingenieria%20en%20Inteligencia%20Artificial_Especializacion.pdf"} },
-            pregunta="¿Qué tecnología permite que un sistema aprenda patrones a partir de datos?", opciones=new[]{"Machine Learning","Impresión","Correo electrónico"}, correcta=0, explicacion="Machine Learning permite que un sistema aprenda patrones a partir de ejemplos.", pista="Busca una tecnología que aprende a partir de ejemplos." },
+            pregunta="¿Para qué sirve la Ingeniería?", opciones=new[]{"Para crear soluciones a problemas con tecnología","Para escribir poemas","Para preparar recetas de cocina"}, correcta=0, explicacion="La Ingeniería usa la ciencia y la tecnología para crear cosas útiles: apps, máquinas, sistemas y más.", pista="Piensa en quien inventa o mejora cosas como apps, puentes o máquinas." },
         new Est{ id="economia", target="ECO_TORO", nombre="Economía", grupo="Economía", mascota="Toro", color=new Color(0.878f,0.125f,0.169f), fbx="Bullish_Banker_texture",
             insignia="Analista", mensaje="Observa los datos y encuentra la mejor lectura.",
             resumen="Economía. Observa los datos y encuentra la mejor lectura. Estilo del reto: análisis económico o financiero. En Carreras puedes abrir la malla, las certificaciones y las áreas de especialización de cada carrera en la página oficial.",
@@ -66,7 +98,7 @@ namespace CampusAR.EditorTools
                 new CareerLink{nombre="Economía", url="https://www.ue.edu.pe/pregrado/carreras/economia", urlMalla="https://www.ue.edu.pe/pregrado/carreras/economia", urlCertificaciones="https://www.ue.edu.pe/pregrado/images/files/2025/FCEA/certificaciones/Economia.pdf", urlEspecializacion="https://www.ue.edu.pe/pregrado/images/files/2025/FCEA/especializaciones/Economia.pdf"},
                 new CareerLink{nombre="Economía y Finanzas", url="https://www.ue.edu.pe/pregrado/carreras/economia-y-finanzas", urlMalla="https://www.ue.edu.pe/pregrado/carreras/economia-y-finanzas", urlCertificaciones="https://www.ue.edu.pe/pregrado/images/files/2025/FCEA/certificaciones/Economia%20y%20Finanzas.pdf", urlEspecializacion="https://www.ue.edu.pe/pregrado/images/files/2025/FCEA/especializaciones/Economia%20y%20Finanzas.pdf"},
                 new CareerLink{nombre="Economía y Negocios Internacionales", url="https://www.ue.edu.pe/pregrado/carreras/economia-negocios-internacionales", urlMalla="https://www.ue.edu.pe/pregrado/carreras/economia-negocios-internacionales", urlCertificaciones="https://www.ue.edu.pe/pregrado/images/files/2025/FCEA/certificaciones/Economia%20y%20Negocios%20Internacionales.pdf", urlEspecializacion="https://www.ue.edu.pe/pregrado/images/files/2025/FCEA/especializaciones/Economia%20y%20Negocios%20Internacionales.pdf"} },
-            pregunta="Si los precios aumentan de manera general y sostenida, ¿qué fenómeno describe mejor la situación?", opciones=new[]{"Inflación","Exportación","Productividad"}, correcta=0, explicacion="Un aumento general y sostenido de los precios se llama inflación.", pista="Piensa en qué pasa cuando, mes tras mes, casi todo cuesta más." },
+            pregunta="¿Qué estudia la Economía?", opciones=new[]{"Cómo se usan el dinero y los recursos","Cómo se construyen puentes","Cómo se curan las enfermedades"}, correcta=0, explicacion="La Economía estudia cómo personas, empresas y países usan el dinero y los recursos para tomar decisiones.", pista="Piensa en dinero, precios y en cómo decidimos qué comprar." },
         new Est{ id="ciencias", target="CIE_LEON", nombre="Derecho y Ciencias Sociales", grupo="Derecho y Ciencias Sociales", mascota="León", color=new Color(0.965f,0.710f,0.000f), fbx="Lab_Lion_texture",
             insignia="Explorador social", mensaje="Analiza el caso y comprende a las personas y su entorno.",
             resumen="Derecho y Ciencias Sociales. Analiza el caso y comprende a las personas y su entorno. Estilo del reto: interpretación, caso breve o comportamiento humano. En Carreras puedes abrir la malla, las certificaciones y las áreas de especialización de cada carrera en la página oficial.",
@@ -74,7 +106,7 @@ namespace CampusAR.EditorTools
                 new CareerLink{nombre="Derecho", url="https://www.ue.edu.pe/pregrado/carreras/derecho", urlMalla="https://www.ue.edu.pe/pregrado/carreras/derecho", urlCertificaciones="https://www.ue.edu.pe/pregrado/images/files/2026/certificaciones/Certificacion-DERECHO.pdf", urlEspecializacion="https://www.ue.edu.pe/pregrado/images/files/2026/certificaciones/Areas-de-especializacion-DERECHO.pdf"},
                 new CareerLink{nombre="Derecho Corporativo", url="https://www.ue.edu.pe/pregrado/carreras/derecho-corporativo", urlMalla="https://www.ue.edu.pe/pregrado/carreras/derecho-corporativo", urlCertificaciones="https://www.ue.edu.pe/pregrado/images/files/2024/Certificaciones-Especializaciones/Certificados%20de%20especialidad%20y%20certificaciones%20transversales%20-%20Derecho%20Corporativo-2.pdf", urlEspecializacion="https://www.ue.edu.pe/pregrado/images/files/2024/Certificaciones-Especializaciones/Certificados%20de%20especialidad%20y%20certificaciones%20transversales%20-%20Derecho%20Corporativo-1.pdf"},
                 new CareerLink{nombre="Psicología", url="https://www.ue.edu.pe/pregrado/carreras/psicologia", urlMalla="https://www.ue.edu.pe/pregrado/carreras/psicologia", urlCertificaciones="https://www.ue.edu.pe/pregrado/images/files/2026/certificaciones/Certificacion-PSICOLOGIA.pdf", urlEspecializacion="https://www.ue.edu.pe/pregrado/images/files/2026/certificaciones/Areas-de-especializacion-PSICOLOGIA.pdf"} },
-            pregunta="Antes de decidir en un conflicto, ¿qué acción es más adecuada?", opciones=new[]{"Revisar hechos y normas/contexto","Elegir al azar","Ignorar a las partes"}, correcta=0, explicacion="Una decisión justa parte de conocer los hechos, las normas y el contexto.", pista="Antes de decidir, hay que saber qué pasó y qué reglas aplican." },
+            pregunta="¿Qué estudia el Derecho?", opciones=new[]{"Las leyes y las normas para vivir en sociedad","Los planetas y las estrellas","Los motores de los autos"}, correcta=0, explicacion="El Derecho estudia las leyes y normas que ayudan a que las personas convivan con justicia.", pista="Piensa en jueces, abogados y en las reglas que todos debemos cumplir." },
         };
 
         // Targets de la base "Trabajo_final" (Target Manager). Los 8 cuadrados (QR) NO se usan.
@@ -288,6 +320,7 @@ namespace CampusAR.EditorTools
         static StationCatalog CrearDatos(Dictionary<string, GameObject> prefabs)
         {
             var lista = new List<StationDefinition>();
+            AsegurarFxMat();
             foreach (var e in Estaciones)
             {
                 string p = RutaDatos + "/Estacion_" + e.id + ".asset";
@@ -308,6 +341,8 @@ namespace CampusAR.EditorTools
                 def.summary = e.resumen;
                 def.grupoNombre = e.grupo;
                 def.insigniaNombre = e.insignia;
+                def.insigniaIcono = CargarInsignia(e.id);
+                def.infoCorta = InfoCorta.ContainsKey(e.id) ? InfoCorta[e.id] : e.mensaje;
                 def.mensajePersonalidad = e.mensaje;
                 def.careers = e.carreras;
                 // Datos sin aprobación: se dejan explícitos como pendientes (no inventar).
@@ -523,7 +558,7 @@ namespace CampusAR.EditorTools
             flow.panelInfoHub = ConstruirInfoHub(safe, flow);
             var reto = ConstruirReto(safe, flow, out var quizCtl);
             var rec = ConstruirRecorrido(safe, flow, catalogo, out var progCtl);
-            var insignia = ConstruirInsignia(safe, flow);
+            var insignia = ConstruirInsignia(safe, flow, catalogo);
             var conf = ConstruirConfirmacion(safe, flow);
             TemarPanelEstacion(info); TemarPanelEstacion(reto); TemarPanelEstacion(insignia);
             GameObject menuEst = ar ? ConstruirMenuEstacion(safe, flow) : null;
@@ -622,6 +657,7 @@ namespace CampusAR.EditorTools
             Al(Btn(fila, "BtnInicio", "Inicio", BotonSec, 130, 34), flow.IrAInicio);
             Al(Btn(fila, "BtnRecorrido", "Mi recorrido", BotonSec, 130, 34), flow.AbrirRecorrido);
             Al(Btn(fila, "BtnAyuda", "Ayuda", BotonSec, 130, 34), flow.AbrirAyuda);
+            Al(Btn(fila, "BtnSonido", "Sonido", BotonSec, 130, 34), flow.AlternarSonido);
             var estado = Txt(barra, "Estado", "Buscando…", 38, Texto, TextAlignmentOptions.Center, true);
             Anclar((RectTransform)estado.transform, new Vector2(0, 0), new Vector2(1, 0), new Vector2(0.5f, 0), new Vector2(0, 12), new Vector2(-48, 190));
 
@@ -646,6 +682,24 @@ namespace CampusAR.EditorTools
             bm.GetComponent<LayoutElement>().minWidth = 360; bm.GetComponent<LayoutElement>().preferredWidth = 360;
             Al(bm, flow.AbrirMenuEstacion);
             tar.gameObject.SetActive(false);
+
+            // acciones de la mascota: Girar / Caminar / Info (solo con mascota visible)
+            var acc = Rt("PanelAcciones", hud);
+            Anclar(acc, new Vector2(0, 0), new Vector2(1, 0), new Vector2(0.5f, 0), new Vector2(0, 225), new Vector2(-48, 140));
+            var ah = acc.gameObject.AddComponent<HorizontalLayoutGroup>();
+            ah.spacing = 16; ah.childControlWidth = true; ah.childControlHeight = true; ah.childForceExpandWidth = true; ah.childForceExpandHeight = true;
+            var bGirar = Btn(acc, "BtnGirar", "Girar", Boton, 140, 44);
+            var bCaminar = Btn(acc, "BtnCaminar", "Caminar", Boton, 140, 44);
+            var bInfo = Btn(acc, "BtnInfo", "Info", new Color(0.95f, 0.65f, 0.10f, 1f), 140, 44);
+            acc.gameObject.SetActive(false);
+
+            // burbuja de información (se cierra al tocarla)
+            var bub = Btn(hud, "Burbuja", "", Tarjeta, 330, 38, TextAlignmentOptions.MidlineLeft);
+            Anclar((RectTransform)bub.transform, new Vector2(0.04f, 0), new Vector2(0.96f, 0), new Vector2(0.5f, 0), new Vector2(0, 385), new Vector2(0, 340));
+            var bubTxt = bub.transform.Find("Etiqueta").GetComponent<TMP_Text>();
+            bubTxt.fontStyle = FontStyles.Normal; bubTxt.fontSize = 40; bubTxt.alignment = TextAlignmentOptions.MidlineLeft;
+            var bubOut = bub.gameObject.AddComponent<Outline>(); bubOut.effectColor = new Color(1f, 0.82f, 0.2f, 1f); bubOut.effectDistance = new Vector2(6, -6);
+            bub.gameObject.SetActive(false);
 
             // ¿no reconoce?
             var nr = Rt("PanelNoReconoce", hud);
@@ -682,6 +736,11 @@ namespace CampusAR.EditorTools
             ctl = ctlGo.AddComponent<ARStationController>();
             ctl.estado = estado; ctl.guiaEscaneo = guia.gameObject; ctl.tarjetaEstacion = tar.gameObject; ctl.tarjetaTitulo = tt;
             ctl.panelNoReconoce = nr.gameObject; ctl.panelPermiso = pp.gameObject;
+            ctl.usarModelTargets = false;        // el tótem queda fuera: el disparador es la placa
+            ctl.panelAcciones = acc.gameObject; ctl.burbuja = bub.gameObject; ctl.burbujaTexto = bubTxt;
+            ctl.etiquetaGirar = bGirar.transform.Find("Etiqueta").GetComponent<TMP_Text>();
+            ctl.etiquetaCaminar = bCaminar.transform.Find("Etiqueta").GetComponent<TMP_Text>();
+            Al(bGirar, ctl.GirarMascota); Al(bCaminar, ctl.CaminarMascota); Al(bInfo, ctl.InfoMascota); Al(bub, ctl.CerrarBurbuja);
             return hud.gameObject;
         }
 
@@ -890,6 +949,13 @@ namespace CampusAR.EditorTools
             ctl = p.gameObject.AddComponent<QuizController>();
             ctl.titulo = Titulo(p, "Mini reto", 58);
             var ct = Scroll(p, out _);
+            var ig = Rt("Insignia", ct);
+            var igImg = ig.gameObject.AddComponent<Image>(); igImg.preserveAspect = true; igImg.raycastTarget = false;
+            var igLe = ig.gameObject.AddComponent<LayoutElement>(); igLe.minHeight = 280; igLe.preferredHeight = 280;
+            ig.gameObject.AddComponent<PopIn>().respirar = false;
+            ig.gameObject.GetComponent<PopIn>().enabled = false;
+            ig.gameObject.SetActive(false);
+            ctl.insigniaImg = igImg;
             ctl.estadoSello = Txt(ct, "EstadoSello", "", 36, TextoSuave);
             ctl.pregunta = Txt(ct, "Pregunta", "", 48, Texto, TextAlignmentOptions.TopLeft, true);
 
@@ -923,10 +989,20 @@ namespace CampusAR.EditorTools
             ctl.contador.gameObject.AddComponent<LayoutElement>().minHeight = 100;
             var ct = Scroll(p, out _);
             ctl.filas = new TMP_Text[cat.estaciones.Length];
+            ctl.iconos = new Image[cat.estaciones.Length];
             for (int i = 0; i < ctl.filas.Length; i++)
             {
-                var f = Txt(ct, "Fila" + i, "", 44, Texto);
-                f.gameObject.AddComponent<LayoutElement>().minHeight = 130;
+                var fila = Rt("Fila" + i, ct);
+                fila.gameObject.AddComponent<LayoutElement>().minHeight = 170;
+                var fh = fila.gameObject.AddComponent<HorizontalLayoutGroup>();
+                fh.spacing = 24; fh.childAlignment = TextAnchor.MiddleLeft;
+                fh.childControlWidth = true; fh.childControlHeight = true; fh.childForceExpandWidth = false; fh.childForceExpandHeight = false;
+                var ic = Rt("Icono", fila);
+                var icImg = ic.gameObject.AddComponent<Image>(); icImg.preserveAspect = true; icImg.raycastTarget = false;
+                var icLe = ic.gameObject.AddComponent<LayoutElement>(); icLe.minWidth = 150; icLe.preferredWidth = 150; icLe.minHeight = 150; icLe.preferredHeight = 150;
+                ctl.iconos[i] = icImg;
+                var f = Txt(fila, "Texto", "", 44, Texto);
+                f.gameObject.AddComponent<LayoutElement>().flexibleWidth = 1;
                 ctl.filas[i] = f;
             }
             ctl.botonInsignia = Btn(p, "BtnInsignia", "Insignia bloqueada", Boton, 150, 42);
@@ -938,11 +1014,25 @@ namespace CampusAR.EditorTools
         }
 
         // ---- Insignia
-        static GameObject ConstruirInsignia(Transform safe, AppFlowController flow)
+        static GameObject ConstruirInsignia(Transform safe, AppFlowController flow, StationCatalog cat)
         {
             var p = Panel(safe, "PanelInsignia");
             p.GetComponent<VerticalLayoutGroup>().childAlignment = TextAnchor.MiddleCenter;
             Titulo(p, "¡Recorrido completado!", 80);
+            var grid = Rt("Insignias", p);
+            var gle = grid.gameObject.AddComponent<LayoutElement>(); gle.minHeight = 720; gle.preferredHeight = 720;
+            var gl = grid.gameObject.AddComponent<GridLayoutGroup>();
+            gl.cellSize = new Vector2(330, 330); gl.spacing = new Vector2(30, 30); gl.constraint = GridLayoutGroup.Constraint.FixedColumnCount; gl.constraintCount = 2;
+            gl.childAlignment = TextAnchor.MiddleCenter;
+            var fin = p.gameObject.AddComponent<InsigniaFinal>(); fin.catalogo = cat;
+            fin.iconos = new Image[cat.estaciones.Length];
+            for (int i = 0; i < fin.iconos.Length; i++)
+            {
+                var c = Rt("Insignia" + i, grid);
+                var ci = c.gameObject.AddComponent<Image>(); ci.preserveAspect = true; ci.raycastTarget = false;
+                c.gameObject.AddComponent<PopIn>();
+                fin.iconos[i] = ci;
+            }
             var t = Txt(p, "Texto",
                 "Reuniste los 4 sellos: Lobo, Vikingo, Toro y León.\nGracias por conocer las facultades del campus.", 46, Texto, TextAlignmentOptions.Center);
             t.gameObject.AddComponent<LayoutElement>().minHeight = 300;

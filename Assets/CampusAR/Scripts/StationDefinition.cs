@@ -37,6 +37,8 @@ namespace CampusAR
         public Color colorFacultad = Color.white;
         public string grupoNombre;          // p. ej. "Administración y negocios"
         public string insigniaNombre;       // p. ej. "Estratega"
+        public Sprite insigniaIcono;        // dibujo de la insignia (Assets/CampusAR/Insignias)
+        [TextArea(2, 5)] public string infoCorta;   // mensaje breve de la mascota (burbuja y voz)
         public string mensajePersonalidad;  // frase corta de la mascota
 
         [Header("AR")]

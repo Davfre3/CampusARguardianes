@@ -8,7 +8,7 @@ namespace CampusAR
     public class PressScale : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerExitHandler
     {
         float objetivo = 1f;
-        public void OnPointerDown(PointerEventData e) { objetivo = 0.94f; }
+        public void OnPointerDown(PointerEventData e) { objetivo = 0.94f; AudioManager.Clic(); }
         public void OnPointerUp(PointerEventData e) { objetivo = 1f; }
         public void OnPointerExit(PointerEventData e) { objetivo = 1f; }
         void OnEnable() { objetivo = 1f; }

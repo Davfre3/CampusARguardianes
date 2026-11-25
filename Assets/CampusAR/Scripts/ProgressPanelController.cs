@@ -10,6 +10,7 @@ namespace CampusAR
         [HideInInspector] public AppFlowController flow;
         public TMP_Text[] filas;           // una por estación del catálogo
         public TMP_Text contador;
+        public Image[] iconos;             // un dibujo por estación (gris = pendiente)
         public Button botonInsignia;
 
         void OnEnable() { ProgressService.Changed += Refrescar; Refrescar(); }
@@ -24,6 +25,11 @@ namespace CampusAR
             {
                 var e = cat.estaciones[i];
                 bool ok = ProgressService.EstaCompletada(e.stationId);
+                if (iconos != null && i < iconos.Length && iconos[i] != null)
+                {
+                    iconos[i].sprite = e.insigniaIcono; iconos[i].enabled = e.insigniaIcono != null;
+                    iconos[i].color = ok ? Color.white : new Color(0.2f, 0.2f, 0.24f, 0.85f);
+                }
                 filas[i].text = (ok ? "[X] " : "[  ] ") + e.mascotaNombre + " — " + e.displayName +
                                 (ok ? "\n      COMPLETADO · insignia «" + e.insigniaNombre + "»" : "\n      Pendiente");
             }

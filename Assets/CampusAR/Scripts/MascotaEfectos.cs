@@ -26,9 +26,28 @@ namespace CampusAR
         Vector2 posInicio;
         bool seMovio;
 
+        // modos de los botones
+        StationDefinition defActual;
+        bool girando, caminando;
+        float yawAuto, wCaminar, angCam;
+        public bool Girando { get { return girando; } }
+        public bool Caminando { get { return caminando; } }
+
+        public void AlternarGiro() { girando = !girando; if (girando) caminando = false; tUltimaInteraccion = UltimaGlobal = Time.unscaledTime; AudioManager.Clic(); }
+        public void AlternarCaminar() { caminando = !caminando; if (caminando) girando = false; tUltimaInteraccion = UltimaGlobal = Time.unscaledTime; AudioManager.Mascota(); Chispas(10); }
+        public void Saltar() { tHop = Time.unscaledTime; tUltimaInteraccion = UltimaGlobal = Time.unscaledTime; AudioManager.Mascota(); Chispas(18); }
+        public void DetenerModos() { girando = caminando = false; }
+
+        void Chispas(int n)
+        {
+            if (defActual == null || modelo == null) return;
+            FxChispas.Rafaga(defActual.stationId, modelo.position + Vector3.up * 0.04f, defActual.colorFacultad, n);
+        }
+
         public void Configurar(StationDefinition def, float alturaMascota)
         {
             altura = alturaMascota;
+            defActual = def;
             foreach (Transform h in transform)
             {
                 if (h.name == "Aro") aro = h;
@@ -57,8 +76,10 @@ namespace CampusAR
         {
             t0 = Time.unscaledTime;
             yawUsuario = 0f; zoom = 1f; tocando = false; tUltimaInteraccion = -99f;
+            girando = caminando = false; yawAuto = 0f; wCaminar = 0f;
             OrientarDeFrente();
             Aplicar(0f);
+            if (defActual != null) { Chispas(20); AudioManager.Mascota(); }
         }
 
         // Vuelve a aparecer con rebote y de frente (por ejemplo, al cerrar el menú para verla).
@@ -66,7 +87,9 @@ namespace CampusAR
         {
             t0 = Time.unscaledTime;
             yawUsuario = 0f; zoom = 1f; tUltimaInteraccion = -99f;
+            girando = caminando = false; yawAuto = 0f; wCaminar = 0f;
             OrientarDeFrente();
+            Chispas(20); AudioManager.Mascota();
         }
 
         // La mascota arranca mirando a la cámara (su frente es -Z local).
@@ -151,7 +174,7 @@ namespace CampusAR
         void FinToque()
         {
             tocando = false;
-            if (!bloqueado && !seMovio && Time.unscaledTime - tInicioToque < 0.3f) { tHop = Time.unscaledTime; tUltimaInteraccion = UltimaGlobal = Time.unscaledTime; }
+            if (!bloqueado && !seMovio && Time.unscaledTime - tInicioToque < 0.3f) Saltar();
         }
 
         void Girar(float dx) { yawUsuario -= dx * 0.4f; tUltimaInteraccion = UltimaGlobal = Time.unscaledTime; }
@@ -165,7 +188,12 @@ namespace CampusAR
             float k = t >= 0.6f ? 1f : EaseOutBack(Mathf.Clamp01(t / 0.6f));      // aparición con rebote
 
             // balanceo suave solo cuando nadie la está moviendo
+            float dt = Time.unscaledDeltaTime;
+            if (girando) yawAuto -= 110f * dt;
+            wCaminar = Mathf.MoveTowards(wCaminar, caminando ? 1f : 0f, dt * 2.5f);
+            if (caminando) angCam += dt * 1.1f;
             float quieto = Mathf.Clamp01((Time.unscaledTime - tUltimaInteraccion - 1.5f) / 1.5f);
+            if (girando || caminando) quieto = 0f;
             float giro = 16f * Mathf.Sin(t * 0.9f) * quieto;
 
             // saludo: salto y vuelta completa al tocar
@@ -179,8 +207,20 @@ namespace CampusAR
 
             float flota = 0.008f * Mathf.Sin(t * 2.2f) + 0.008f;
             modelo.localScale = escalaModelo * (k * zoom);
-            modelo.localPosition = posModelo + Vector3.up * ((t > 0.6f ? flota : flota * k) + salto);
-            modelo.localRotation = Quaternion.AngleAxis(yawFrente + yawUsuario + giro + vuelta, Vector3.up) * rotModelo;
+            // caminar: recorre un círculo pequeño sobre la placa, con pasos (rebote) y balanceo
+            Vector3 paseo = Vector3.zero; float yawBase = yawFrente + yawUsuario + giro + vuelta + yawAuto; float roll = 0f, paso = 0f;
+            if (wCaminar > 0.001f)
+            {
+                const float radio = 0.045f;
+                paseo = new Vector3(Mathf.Cos(angCam), 0f, Mathf.Sin(angCam)) * radio * wCaminar;
+                Vector3 tang = new Vector3(-Mathf.Sin(angCam), 0f, Mathf.Cos(angCam));
+                yawBase = Mathf.LerpAngle(yawBase, Vector3.SignedAngle(Vector3.back, tang, Vector3.up), wCaminar);
+                float fase = Time.unscaledTime * 2.6f * Mathf.PI;
+                paso = Mathf.Abs(Mathf.Sin(fase)) * 0.011f * wCaminar;
+                roll = Mathf.Sin(fase) * 6f * wCaminar;
+            }
+            modelo.localPosition = posModelo + paseo + Vector3.up * ((t > 0.6f ? flota : flota * k) + salto + paso);
+            modelo.localRotation = Quaternion.AngleAxis(yawBase, Vector3.up) * Quaternion.AngleAxis(roll, Vector3.forward) * rotModelo;
 
             if (aro != null) aro.localScale = escalaAro * (k * (1f + 0.07f * Mathf.Sin(t * 3.2f)) * Mathf.Max(1f, zoom));
 
@@ -190,7 +230,7 @@ namespace CampusAR
                 Vector3 d = etiqueta.position - cam.transform.position; d.y = 0;
                 if (d.sqrMagnitude > 1e-8f) etiqueta.rotation = Quaternion.LookRotation(d.normalized, Vector3.up);
                 etiqueta.localScale = Vector3.one * k;
-                etiqueta.localPosition = new Vector3(0, altura * 1.12f * Mathf.Max(1f, zoom), 0);
+                etiqueta.localPosition = new Vector3(paseo.x, altura * 1.12f * Mathf.Max(1f, zoom), paseo.z);
             }
         }
 
