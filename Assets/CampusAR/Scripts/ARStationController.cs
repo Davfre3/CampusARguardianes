@@ -139,7 +139,7 @@ namespace CampusAR
                 entradas[def.stationId] = en;
 
                 // 3) Disparador adicional por MODELO (Model Target). La placa sigue funcionando como respaldo.
-                if (usarModelTargets && !string.IsNullOrEmpty(def.modelTargetName))
+                if (ModelTargetsHabilitados && usarModelTargets && !string.IsNullOrEmpty(def.modelTargetName))
                 {
                     try
                     {
@@ -231,6 +231,8 @@ namespace CampusAR
 
         [Tooltip("Reconocimiento por modelo 3D impreso (tótem). Desactivado: el disparador es la placa.")]
         public bool usarModelTargets = false;
+        // Interruptor general: el tótem queda fuera de la app aunque la escena guardada diga otra cosa.
+        static readonly bool ModelTargetsHabilitados = false;
 
         // ---------- botones de la mascota: Girar / Caminar / Info ----------
         MascotaEfectos FxActual()
