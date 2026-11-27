@@ -373,8 +373,10 @@ namespace CampusAR.EditorTools
                 lista.Add(def);
             }
             string pc = RutaRecursos + "/CatalogoEstaciones.asset";
-            var cat = AssetDatabase.LoadAssetAtPath<StationCatalog>(pc);
-            if (cat == null) { cat = ScriptableObject.CreateInstance<StationCatalog>(); AssetDatabase.CreateAsset(cat, pc); }
+            // Se recrea siempre: así el asset queda enlazado al script StationCatalog (si no, la build no lo reconoce).
+            AssetDatabase.DeleteAsset(pc);
+            var cat = ScriptableObject.CreateInstance<StationCatalog>();
+            AssetDatabase.CreateAsset(cat, pc);
             cat.estaciones = lista.ToArray();
             EditorUtility.SetDirty(cat);
             AssetDatabase.SaveAssets();

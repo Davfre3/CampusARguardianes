@@ -42,8 +42,7 @@ namespace CampusAR
                     case "ciencias": tipo = PrimitiveType.Sphere; break;                                       // burbujas
                     default: tipo = PrimitiveType.Cube; esc = new Vector3(1f, 0.5f, 0.5f); break;              // chispas
                 }
-                var g = GameObject.CreatePrimitive(tipo);
-                var col = g.GetComponent<Collider>(); if (col != null) Destroy(col);
+                var g = MallasBasicas.Crear(tipo, "Chispa");
                 g.transform.SetParent(transform, false);
                 var r = g.GetComponent<Renderer>(); r.sharedMaterial = mat;
                 r.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off; r.receiveShadows = false;

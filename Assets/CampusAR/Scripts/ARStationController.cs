@@ -355,12 +355,11 @@ namespace CampusAR
             perdidaCo = null;
             if (e == null || e.tracked || actual != e) yield break;
             {
-                e.contenido.SetActive(false);
-                if (panelAcciones != null) panelAcciones.SetActive(false);
-                if (joystick != null) joystick.gameObject.SetActive(false);
-                CerrarBurbuja();
-                Estado("Seguimiento perdido. Vuelve a enfocar la imagen de " + actual.def.displayName + ".");
-                if (guiaEscaneo != null) guiaEscaneo.SetActive(true);
+                // La mascota se queda activa: se suelta de la placa y se conserva donde estaba (no desaparece).
+                if (e.contenido.transform.parent != null)
+                    e.contenido.transform.SetParent(null, true);
+                if (guiaEscaneo != null) guiaEscaneo.SetActive(false);
+                Estado("Mascota fija en pantalla. Enfoca la placa de nuevo para recolocarla.");
             }
         }
 
@@ -432,15 +431,14 @@ namespace CampusAR
             var mat = new Material(Shader.Find("Universal Render Pipeline/Lit") ?? Shader.Find("Standard"));
             mat.color = def.colorFacultad;
             float h = alturaMascota;
-            var cuerpo = GameObject.CreatePrimitive(PrimitiveType.Capsule);
+            var cuerpo = MallasBasicas.Crear(PrimitiveType.Sphere, "Cuerpo");
             cuerpo.transform.SetParent(g.transform, false);
-            cuerpo.transform.localScale = new Vector3(h * 0.5f, h * 0.3f, h * 0.5f);
+            cuerpo.transform.localScale = new Vector3(h * 0.5f, h * 0.6f, h * 0.5f);
             cuerpo.transform.localPosition = new Vector3(0, h * 0.3f, 0);
-            var cabeza = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            var cabeza = MallasBasicas.Crear(PrimitiveType.Sphere, "Cabeza");
             cabeza.transform.SetParent(g.transform, false);
             cabeza.transform.localScale = Vector3.one * h * 0.35f;
             cabeza.transform.localPosition = new Vector3(0, h * 0.82f, 0);
-            foreach (var c in g.GetComponentsInChildren<Collider>()) Destroy(c);
             foreach (var r in g.GetComponentsInChildren<Renderer>()) r.sharedMaterial = mat;
             return g;
         }

@@ -58,7 +58,7 @@ MonoBehaviour:
   serviceHours: "Atenci\xF3n presencial: lunes a viernes, de 10:00 a. m. a 6:45 p.
     m."
   webUrl: https://davfre3.github.io/campus-ar-guardians-web/toro.html
-  ilustracion: {fileID: 21300000, guid: 07e355d35f891464ca1c7598a3daa52b, type: 3}
+  ilustracion: {fileID: 21300000, guid: be91c355b946aa64c901eac56ec28689, type: 3}
   mapUrl: 
   quiz:
     pregunta: "\xBFQu\xE9 estudia la Econom\xEDa?"

@@ -43,11 +43,18 @@ namespace CampusAR
         public Sprite Icono()
         {
             if (insigniaIcono != null) return insigniaIcono;
-            if (_iconoCache == null)
+            if (_iconoCache != null) return _iconoCache;
+            string ruta = "Insignias/Insignia_" + stationId;
+            try
             {
-                var t = Resources.Load<Texture2D>("Insignias/Insignia_" + stationId);
-                if (t != null) _iconoCache = Sprite.Create(t, new Rect(0, 0, t.width, t.height), new Vector2(0.5f, 0.5f), 100f);
+                _iconoCache = Resources.Load<Sprite>(ruta);
+                if (_iconoCache == null)
+                {
+                    var t = Resources.Load<Texture2D>(ruta);
+                    if (t != null) _iconoCache = Sprite.Create(t, new Rect(0, 0, t.width, t.height), new Vector2(0.5f, 0.5f), 100f);
+                }
             }
+            catch (System.Exception ex) { Debug.LogWarning("[CampusAR] Icono de insignia no disponible (" + stationId + "): " + ex.Message); }
             return _iconoCache;
         }        // dibujo de la insignia (Assets/CampusAR/Insignias)
         [TextArea(2, 5)] public string infoCorta;   // mensaje breve de la mascota (burbuja y voz)
@@ -82,24 +89,6 @@ namespace CampusAR
         public static bool EsPendiente(string s)
         {
             return string.IsNullOrWhiteSpace(s) || s.Contains("PENDIENTE");
-        }
-    }
-
-    [CreateAssetMenu(menuName = "Campus AR/Catálogo de estaciones", fileName = "CatalogoEstaciones")]
-    public class StationCatalog : ScriptableObject
-    {
-        public StationDefinition[] estaciones;
-
-        public StationDefinition PorId(string id)
-        {
-            foreach (var e in estaciones) if (e != null && e.stationId == id) return e;
-            return null;
-        }
-
-        public StationDefinition PorTarget(string targetName)
-        {
-            foreach (var e in estaciones) if (e != null && e.targetName == targetName) return e;
-            return null;
         }
     }
 }

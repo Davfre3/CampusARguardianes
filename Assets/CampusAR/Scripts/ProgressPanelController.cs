@@ -25,13 +25,15 @@ namespace CampusAR
             {
                 var e = cat.estaciones[i];
                 bool ok = ProgressService.EstaCompletada(e.stationId);
-                if (iconos != null && i < iconos.Length && iconos[i] != null)
-                {
-                    iconos[i].sprite = e.Icono(); iconos[i].enabled = e.Icono() != null;
-                    iconos[i].color = ok ? Color.white : new Color(0.2f, 0.2f, 0.24f, 0.85f);
-                }
                 filas[i].text = (ok ? "[X] " : "[  ] ") + e.mascotaNombre + " — " + e.displayName +
                                 (ok ? "\n      COMPLETADO · insignia «" + e.insigniaNombre + "»" : "\n      Pendiente");
+                if (iconos != null && i < iconos.Length && iconos[i] != null)
+                {
+                    Sprite sp = null;
+                    try { sp = e.Icono(); } catch (System.Exception ex) { Debug.LogWarning("[CampusAR] " + ex.Message); }
+                    iconos[i].sprite = sp; iconos[i].enabled = sp != null;
+                    iconos[i].color = ok ? Color.white : new Color(0.45f, 0.45f, 0.5f, 0.9f);
+                }
             }
             int n = ProgressService.Contar(cat);
             contador.text = n + " de " + total + " sellos";

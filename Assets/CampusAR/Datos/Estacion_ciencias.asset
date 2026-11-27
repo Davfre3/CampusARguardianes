@@ -58,7 +58,7 @@ MonoBehaviour:
   serviceHours: "Atenci\xF3n presencial: lunes a viernes, de 10:00 a. m. a 6:45 p.
     m."
   webUrl: https://davfre3.github.io/campus-ar-guardians-web/leon.html
-  ilustracion: {fileID: 21300000, guid: ef6bc98a414742f4aa0cf29979f87d85, type: 3}
+  ilustracion: {fileID: 21300000, guid: f26e2b1378c41fe45863042a231d6b28, type: 3}
   mapUrl: 
   quiz:
     pregunta: "\xBFQu\xE9 estudia el Derecho?"

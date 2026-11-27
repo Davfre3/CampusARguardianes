@@ -11,7 +11,13 @@ namespace CampusAR.EditorTools
     public static class ConstruirAPK
     {
         [MenuItem("Campus AR/Construir APK (con informe)")]
-        public static void Construir()
+        public static void Construir() { Compilar(false); }
+
+        // Versión de depuración: muestra la consola roja en pantalla y deja los mensajes en logcat.
+        [MenuItem("Campus AR/Construir APK de depuración")]
+        public static void ConstruirDepuracion() { Compilar(true); }
+
+        static void Compilar(bool depuracion)
         {
             Directory.CreateDirectory("Builds");
             // Vuforia 11 exige Android 10 (API 29) o superior.
@@ -26,7 +32,7 @@ namespace CampusAR.EditorTools
                 scenes = escenas,
                 locationPathName = "Builds/CampusAR.apk",
                 target = BuildTarget.Android,
-                options = BuildOptions.None
+                options = depuracion ? BuildOptions.Development : BuildOptions.None
             };
             try
             {

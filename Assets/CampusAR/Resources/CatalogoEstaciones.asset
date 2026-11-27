@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 29ce0593fbc2c44478dd96c9cc726ca8, type: 3}
   m_Name: CatalogoEstaciones
-  m_EditorClassIdentifier: Assembly-CSharp:CampusAR:StationCatalog
+  m_EditorClassIdentifier: Assembly-CSharp::CampusAR.StationCatalog
   estaciones:
   - {fileID: 11400000, guid: 0f3f41ebfa23f0145ab769870ab28a57, type: 2}
   - {fileID: 11400000, guid: 11a1e0dceb770c94fabfb77e628e5a07, type: 2}
