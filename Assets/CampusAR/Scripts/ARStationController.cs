@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Vuforia;
 
 namespace CampusAR
@@ -93,6 +94,51 @@ namespace CampusAR
             bool buscando = actual == null && !AlgunoTracked() && flow.EnRaiz && errorInicio == null;
             if (buscando) { tBusqueda += Time.unscaledDeltaTime; if (tBusqueda > segundosParaAyuda) panelNoReconoce.SetActive(true); }
             else { tBusqueda = 0f; if (actual != null || !flow.EnRaiz) panelNoReconoce.SetActive(false); }
+        }
+
+
+        // ---------- orientación vertical ----------
+        // Si la placa se sostiene de pie (pegada a una pared o en vertical), su "arriba" apunta hacia la cámara y la
+        // mascota se vería desde la cabeza. Con el celular de pie, la mascota se endereza: cabeza arriba y de frente.
+        Quaternion rotEnderezada = Quaternion.identity;
+        bool enderezando;
+
+        bool CelularDePie()
+        {
+            try
+            {
+                var acc = Accelerometer.current;
+                if (acc == null) return true;
+                if (!acc.enabled) InputSystem.EnableDevice(acc);
+                Vector3 a = acc.acceleration.ReadValue();
+                if (a.sqrMagnitude < 1e-4f) return true;
+                a.Normalize();
+                return Mathf.Abs(a.y) > 0.6f;
+            }
+            catch { return true; }
+        }
+
+        void LateUpdate()
+        {
+            var e = actual;
+            if (e == null || !e.tracked || e.contenido == null || !e.contenido.activeInHierarchy) { enderezando = false; return; }
+            var cam = Camera.main;
+            var t = e.contenido.transform;
+            if (cam == null || t.parent == null) return;
+            Vector3 normal = t.parent.up;
+            bool inclinada = Vector3.Angle(normal, cam.transform.up) > 50f && CelularDePie();
+            if (!inclinada)
+            {
+                if (enderezando) { t.localRotation = Quaternion.identity; enderezando = false; }
+                return;
+            }
+            Vector3 arriba = cam.transform.up;
+            Vector3 haciaCamara = Vector3.ProjectOnPlane(cam.transform.position - t.position, arriba);
+            if (haciaCamara.sqrMagnitude < 1e-6f) haciaCamara = Vector3.ProjectOnPlane(-cam.transform.forward, arriba);
+            Quaternion meta = Quaternion.LookRotation(haciaCamara.normalized, arriba);
+            rotEnderezada = enderezando ? Quaternion.Slerp(rotEnderezada, meta, 1f - Mathf.Exp(-10f * Time.deltaTime)) : meta;
+            enderezando = true;
+            t.rotation = rotEnderezada;
         }
 
         // ---------- inicialización ----------
